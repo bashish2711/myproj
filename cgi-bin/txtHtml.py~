@@ -1,0 +1,33 @@
+#!/usr/bin/python
+taskfile = open('tasks.txt')
+lines = taskfile.readlines()
+task_types = []
+tasks = []
+hyperperiod = []
+html = "<html><head><title>TXT to html </title></head><body>"
+    #Allocate task types
+html += "<table width=50% border=1> <caption><h2>Task Table</h2></caption>" 
+for header in "Name", "A.T.", "B.T", "Period", "Deadline":
+	html += "<th> %s </th>" %header
+	
+html += "<tr>"
+for line in lines[1:]:
+    line = line.split('\t') 
+    if len(line) == 5:
+    	html += "<td> %s </td>" %line[4]
+    elif len(line) == 4:
+    	name = 'Task'
+    	html += "<td> %s </td>" %name
+    	  
+    for i in range (0,4):
+        line[i] = int(line[i])
+        html += "<td> %s </td>" %line[i]
+
+    html += "</tr>"
+            
+html += "<table>"
+html += "</body></html>"
+output = open('/var/www/pi/table.html', 'w')
+output.write(html)
+output.close()
+       
