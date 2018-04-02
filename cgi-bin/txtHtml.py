@@ -4,7 +4,29 @@ lines = taskfile.readlines()
 task_types = []
 tasks = []
 hyperperiod = []
-html = "<html><head><title>TXT to html </title></head><body>"
+html = """
+<html>
+<meta HTTP-EQUIV="REFRESH" content="60">
+<head><title>TXT to html</title></head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+</style>
+</head>
+"""
+
     #Allocate task types
 html += "<table width=50% border=1 align="center" style="margin: 0px auto;" > <caption><h2>Task Table</h2></caption>" 
 for header in "Name", "A.T.", "B.T", "Period", "Deadline":
