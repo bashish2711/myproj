@@ -4,7 +4,8 @@ lines = taskfile.readlines()
 task_types = []
 tasks = []
 hyperperiod = []
-html = """
+html = "Content-type:text/html\r\n\r\n"
+html += """
 <html>
 <meta HTTP-EQUIV="REFRESH" content="60">
 <head><title>TXT to html</title></head>
@@ -28,7 +29,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 """
 
     #Allocate task types
-html += "<table width=50% border=1 align="center" style="margin: 0px auto;" > <caption><h2>Task Table</h2></caption>" 
+html += "<table><h2>" 
 for header in "Name", "A.T.", "B.T", "Period", "Deadline":
 	html += "<th> %s </th>" %header
 	
@@ -47,9 +48,9 @@ for line in lines[1:]:
 
     html += "</tr>"
             
-html += "<table>"
+html += "</table>"
 html += "</body></html>"
-output = open('/var/www/pi/table.html', 'w')
+print html
+output = open('/var/www/cgi-bin/ashish/table.html', 'w')
 output.write(html)
 output.close()
-       
