@@ -1,0 +1,363 @@
+<html>   <! "standard" include file >
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" href="/Ferret/html/Aux/SquareFerrets/icon.jpg">
+</head>
+<!--  Let's try various colors.... -->
+
+<!body bgcolor=d09000 text=black> <! pumpkin for Halloween >
+<!body bgcolor=40d040 text=ff0000 > <! green for Christmas >
+
+<body bgcolor=snow text=midnightblue> <! a friendly, light (ferret) blue >
+<html>
+<title>Ferret Testing Harness</title>
+<body>
+<div id="navbar">
+<div class="menu-wrap">
+    <nav class="menu">
+        <ul>
+            <li><a href="http://ferretvm.inn.mentorg.com/Ferret/Welcome.html" title="Main Ferret Page">Ferret Home</a></li>
+            <li>
+                <a href="http://ferretvm.inn.mentorg.com/Ferret/html/tasks.html" title="Ferret Actions">Tasks</a>
+ 
+                <ul class="sub-menu">
+                    <li><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/Admin/admin>Ferret Admin</a></li>
+                    <li><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/TargetEdit/new.sh>Add a New Target</a></li>
+                    <li><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/HostEdit/new>Add a New Host</a></li>
+                    <li><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/MiscEdit/new>Add a new Misc Machine</a></li>
+                </ul>
+            </li>
+            <li><a href="http://ferretvm.inn.mentorg.com/Ferret/html/status.html"  title="What's Up With Ferret">Status</a>
+            
+                <ul class="sub-menu">
+                    <li><a href="http://ferretvm.inn.mentorg.com/Ferret/html/hosttable.html"target=_blank>Host Status</a></li>
+                    <li><a href="http://ferretvm.inn.mentorg.com/Ferret/html/Status/simplestat.html">System Status</a></li>
+                    <li><a href="http://ferretvm.inn.mentorg.com/Ferret/html/php/hosttable.php">Host Assignment Table</a></li>
+					<li><a href="http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/MiscEdit/miscDisplay">MiscMachine Info</a></li>
+					<li><a href="http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/hostdiskusage.sh">Host Disk Usage</a></li>
+                </ul>
+            </li>
+            <li><a href="http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/UserTools/userDisplay">MyFerret</span></a>
+            
+                <ul class="sub-menu">
+					<li><a href="http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/UserTools/manageTargets" > Target Management </a></li>
+					<li><a href="http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/TargetReserve/TargetSelect">Target Reservation Page</a></li>
+					<li><a href="mailto:ferret_admin@mentor.com?subject=Mail from the Ferret Admin Page">Contact the Ferret Admin</a></li>
+                    <li><a href="http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/TargetEdit/targetQueueBlock"> Block a Target Queue </a> </li>
+                </ul>         
+            </li>
+            <li> <a href="http://ferretvm.inn.mentorg.com/Ferret/html/Doc/" title="Ferret Internal Documentation">Documentation</a></li>
+						<li><a href="http://ferretvm.inn.mentorg.com/qadb/" title="QA Database">QADB</a></li>
+						<li><a href="http://testlink.alm.mentorg.com/" title="Testlink">Testlink</a></li>
+						<li><a href="http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/Help/helpstart" title="Ferret Contextual Help">Ferret Help</a></li>
+
+    </nav>
+</div>
+</div>
+<script>
+window.onscroll = function() {myFunction()};
+
+        var dropdown = document.getElementById("navbar");
+        var navbar  = document.getElementById("navbar");
+        var sticky = navbar.offsetTop;
+        
+        function myFunction() {
+          if (window.pageYOffset >= sticky) {
+            navbar.classList.add("sticky")
+            dropdown.classList.add("sticky")
+          } else {
+            dropdown.classList.remove("sticky");
+            navbar.classList.remove("sticky");
+          }
+        }
+</script>
+<style>
+@font-face {
+  font-family: Marat Sans;
+  src: url(fonts/MaratSans.otf);
+}
+
+@font-face {
+  font-family: Marat Sans;
+  src: url(fonts/MaratSansthin.otf);
+  font-weight: thin;
+}
+
+@font-face {
+  font-family: Noe Display;
+  src: url(fonts/NoeDisplayMedium.otf);
+}
+
+@font-face {
+  font-family: Charter;
+  src: url(fonts/charter.otf);
+}
+
+h2 {
+  
+  font-family: Marat Sans;
+  font-size: 20px;
+}
+
+body {
+    margin-top: 0 !important;
+    font-size: 16px;
+    font-family: Georgia, Cambria, charter; 
+    background: #e6e6e6 /*#F0FFFF;*/
+    
+  }
+.header {
+    background-color: #f1f1f100;
+    margin top: 0;
+    padding: 0px;
+    text-align: center;
+    float: center;
+    font-size: 24px;
+font-family: Noe Display;
+  }
+  
+.clearfix:after {
+    display:block;
+    clear:both;
+}
+ 
+.menu-wrap {
+    width:100%;
+    height:50px;
+    background-color:#D8BFD8;
+    overflow:visible;
+    margin-top: 0 !important;
+    box-shadow: 0px 2px 3px rgba(0,0,0,0.2);
+}
+ 
+.menu {
+    width:100%;
+    margin:0px auto;
+}
+ 
+.menu li {
+    margin:0px;
+    list-style:none;
+    font-family:'Ek Mukta';
+}
+ 
+.menu a {
+    /*transition:all linear 0.15s;*/
+    color: #000;
+    text-decoration: none;
+}
+ 
+
+.menu .arrow {
+    font-size:16px;
+    line-height:0%;
+}
+ 
+.menu > ul > li {
+    float:left;
+    display:inline-block;
+    position:relative;
+        font-size: 16px;
+    font-family: Cambria;
+}
+ 
+.menu > ul > li > a {
+    padding:10px 30px;
+    display:inline-block;
+}
+ 
+.menu li:hover > a, .menu .current-item > a {
+    text-decoration:none;
+    color:#8B008B;
+}
+ 
+.menu li:hover .sub-menu {
+    z-index:1;
+    display: block;
+}
+ 
+.sub-menu {
+  display: none;
+    width: 160%;
+    padding: 5px 0px;
+    position: absolute;
+    top: 100%;
+    left: 2px;
+    z-index: -1;
+    /*transition: opacity linear 0.15s;*/
+    box-shadow: 0px 2px 3px rgba(0,0,0,0.2);
+    background:#D8BFD8 ;
+}
+ 
+.sub-menu li {
+    display:block;
+    font-size:16px;
+}
+ 
+.sub-menu li a {
+    padding:10px 30px;
+    display:block;
+}
+ 
+.sub-menu li a:hover, .sub-menu .current-item a {
+    background:#E6E6FA;
+}
+ .sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background:#fff;
+  }
+  
+  .sticky + .content {
+    padding-top: 10px;
+  }
+
+</style>
+</body>
+
+
+<p>
+&nbsp;
+<p>
+
+<h2>Ferret Tasks</h2>
+<body bgcolor=a0c0e0 text=midnightblue> <! a friendly, light (ferret) blue >
+<center>
+<table width=85% border=0 cellpadding=10><tr>
+<tr><td valign=top>	<!-- first column testing / installs / test build / kernel build -->
+
+<table border=4 cellpadding=4>
+
+<!--  Testing  -->
+  <tr><th bgcolor=c0c8b0>Testing</th></tr>
+  <tr><td>
+	<ul>
+	  <li><font size=+1><b><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/TestStart/teststart>Start Tests</a>
+	  </b></font>
+
+	  <li><font size=+1><b><a
+	  href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/TargetReserve/TargetSelect>Open a
+	  Console / Reboot / Reserve / Release</a></b>
+      <li><font size=+1><b><a
+	  href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/makesuitestatus >Create TestSuite Status Page</a></b>
+  	</ul>
+  </td></tr>
+<!-- admin  -->
+  <tr><th bgcolor=c0c8b0>Ferret Admin</th></tr>
+  <tr><td>
+   <font size=+1>
+   <ul>
+	   <li><b><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/Admin/admin>Ferret
+	   Admin</a></b> - view/modify your specific Ferret values (browser cookies)
+	   <b><i>New!</i></b> Seems to be working, feel free to try it.
+	
+
+	  <li><b><a href="http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/Admin/UserManage">Manage Ferret User Database</a></b> 
+	  - <b><font color="#ff663">Please,</font></b> only use if you
+	  are authorized.  If you're not sure if you're authorized, you're not.
+
+   </ul>
+  </td></tr>
+</table>
+</td>
+<td>
+<table border=4 cellpadding=4>
+<!-- Targets -->
+  <tr><th bgcolor=c0c8b0>Targets</th></tr>
+  <tr><td>
+   <font size=+1><b>
+	<ul>
+  	<li><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/TargetEdit/new.sh>Add a New Target</a>
+  	<li><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/TargetEdit/select.sh>Edit an Existing
+  	Target</a>
+  	<li><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/TargetEdit/remove.sh>REMOVE an Existing
+  	Target</a> - Careful!
+	
+  	<li><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/TargetEdit/probeSelect.sh>Probe a 
+  	Target</a>
+	
+	<li><a href="Http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/TargetSearch/setcriteria">Search for
+	a Target</a>  <i><b>New!</b></i>
+	</ul>
+    </b></font>
+  </td></tr>
+<!-- end targets -->
+
+
+
+<!-- hosts -->
+  <tr><th bgcolor=c0c8b0>Hosts</th></tr>
+  <tr><td>
+   <font size=+1>
+	<ul>
+  	  <li><b><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/HostEdit/new>Add a New Host</a></b>
+	  <li><b><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/HostEdit/select.sh>Edit an Existing
+  	Host</a></b>
+<li><b><a href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/HostEdit/remove.sh>Remove an Existing
+  	Host</a> <i> New ! </i></b>
+  </tr>
+  <tr><th bgcolor=c0c8b0>Machines</th></tr>
+    <tr><td>
+    <font size=+1>
+  	<ul>
+  	<li><b><a
+  	href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/MiscEdit/new>Add a new
+  	Misc Machine</a></b> (serial port servers, shelf managers, etc.)
+  	<li><b><a
+  	href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/MiscEdit/select>Edit a
+  	Misc Machine</a></b>
+    <li><b><a
+  	href=http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/MiscEdit/remove>Remove a Misc Machine</a> <i> New ! </i></b>
+
+	</ul>
+   </font>
+  </td></tr>
+<!-- end hosts -->
+
+</td></tr></table>
+</center>
+</table>
+
+
+</td></tr></table>	<! just in case there is a table open>
+</center>
+<hr>
+<cite>
+Ferret is changing and hopefully improving all the time.
+<p>
+Feedback is greatly desired and encouraged.  And easy: 
+just click <a href="mailto:ferret_admin@mentor.com?subject=Feedback on Ferret">here</a>.
+
+</cite>
+<p><hr><P>
+
+<font size=-1>
+<a href="http://ferretvm.inn.mentorg.com/Ferret/Welcome.html" title="Top-level Ferret Page">Ferret Home</a>
+&nbsp; - &nbsp;
+<a href="/Ferret/html/tasks.html" title="Ferret Actions">Tasks</a>
+&nbsp; - &nbsp;
+<a href="/Ferret/html/status.html"  title="What's Up With Ferret">Status</a>
+&nbsp; - &nbsp;
+<a href="http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/UserTools/userDisplay" title="Information Specific to You!">MyFerret</a>
+&nbsp; - &nbsp;
+<a href="/Ferret/html/Doc/" title="Ferret Internal Documentation">Documentation</a>
+&nbsp; - &nbsp;
+<a href="http://ferretvm.inn.mentorg.com/qadb/" title="QA Database">QADB</a>
+&nbsp; - &nbsp;
+<a href="http://testlink.alm.mentorg.com/" title="Testlink">Testlink</a>
+&nbsp; - &nbsp;
+<a href="http://ferretvm.inn.mentorg.com/cgi-bin/Ferret/Help/helpstart" title="Ferret Contextual Help">Ferret Help</a>
+</font>
+
+
+<p>
+<center>
+&copy; Mentor Graphics Inc. 
+</center>
+
+
+
+</body>
+</html>
+
