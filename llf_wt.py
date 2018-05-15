@@ -2,7 +2,12 @@
 
 import string
 import random
-from prime import lcm
+import fractions
+
+def _lcm(a,b): return abs(a * b) / fractions.gcd(a,b) if a and b else 0
+
+def lcm(a):
+    return reduce(_lcm, a)
 
 #A task instance
 class TaskIns(object):
@@ -20,6 +25,11 @@ class TaskIns(object):
     #Allow an instance to use the cpu (periodic)
     def use(self, usage):
         self.usage += usage
+        if self.usage >= self.bt:
+            self.status = "Finish"
+        else:
+            self.status = " "
+        print on_cpu.get_unique_name() + " " + "\t %s \t %s \t %s \t %s \t %s \t %s \t %s" %(self.start, self.bt, self.start, clock_step , self.priority, self.end, self.status)    
         if self.usage >= self.end - self.start:
             return True
         return False
@@ -36,10 +46,10 @@ class TaskIns(object):
 class TaskType(object):
 
     #Constructor
-    def __init__(self, period, release, execution, deadline, name):
+    def __init__(self, period, arrival_time, burst_time, deadline, name):
         self.period    = period
-        self.release   = release
-        self.execution = execution
+        self.arrival_time   = arrival_time
+        self.burst_time = burst_time
         self.deadline  = deadline
         self.name      = name
 
@@ -61,7 +71,7 @@ def tasktype_cmp(self, other):
 
 if __name__ == '__main__':
     #Variables
-    html_color = { 'Task1':'red', 'Task2':'blue', 'Task3':'green', 'Task4':'aqua', 'Task5':'coral', 'Empty':'grey', 'Finish':'black'}
+    html_color = { 'T1':'red', 'T2':'blue', 'T3':'green', 'T4':'aqua', 'T5':'coral', 'Empty':'grey', 'Finish':'black'}
     taskfile = open('tasks.txt')
     lines = taskfile.readlines()
     task_types = []
@@ -70,8 +80,8 @@ if __name__ == '__main__':
     done_list = []
 
     #Allocate task types
-    for line in lines:
-        line = line.split(' ')  
+    for line in lines[3:]:
+        line = line.split('\t')
         for i in range (0,4):
             line[i] = int(line[i])
         if len(line) == 5:
@@ -80,8 +90,8 @@ if __name__ == '__main__':
             name = 'Task'
         else:
             raise Exception('Invalid tasks.txt file structure')
-        if int(line[0])>0:
-            task_types.append(TaskType(period=line[0], release=line[1], execution=line[2], deadline=line[3], name=name))
+        if int(line[0])>=0:
+            task_types.append(TaskType(arrival_time=line[0], burst_time=line[1], period=line[2], deadline=line[3], name=name))
         
     #Calculate hyperperiod
     for task_type in task_types:
@@ -95,11 +105,11 @@ if __name__ == '__main__':
     #Create task instances 
     for i in xrange(0, hyperperiod):
         for task_type in task_types:
-            if  (i - task_type.release) % task_type.period == 0 and i >= task_type.release:
+            if  (i - task_type.arrival_time) % task_type.period == 0 and i >= task_type.arrival_time:
                 start = i
-                end = start + task_type.execution
-                priority = start + task_type.deadline - task_type.execution
-                tasks.append(TaskIns(start=start, end=end, priority=priority, name=task_type.name, bt=task_type.execution))
+                end = start + task_type.burst_time
+                priority = task_type.deadline - task_type.burst_time -task_type.arrival_time
+                tasks.append(TaskIns(start=start, end=end, priority=priority, name=task_type.name, bt=task_type.burst_time))
 
     #Html output start
     html = "<!DOCTYPE html><html><head><title>LLF Scheduling</title></head><body>"
@@ -107,7 +117,7 @@ if __name__ == '__main__':
     #Check utilization
     utilization = 0
     for task_type in task_types:
-        utilization += float(task_type.execution) / float(task_type.period)
+        utilization += float(task_type.burst_time) / float(task_type.period)
     if utilization > 1:
         print 'Utilization error!'
         html += '<br /><br />Utilization error!<br /><br />'
@@ -126,15 +136,14 @@ if __name__ == '__main__':
         if len(ready_list) > 0:
             on_cpu = ready_list[0]
             done_list.append(on_cpu)
-            print on_cpu.get_unique_name() , " uses the processor. " , 
             html += '<div style="float: left; text-align: center; width: 110px; height: 20px; background-color:' + html_color[on_cpu.name] + ';">' + on_cpu.get_unique_name() + '</div>'
-            on_cpu.priority += 1
+            on_cpu.priority += clock_step
             if on_cpu.use(clock_step):
                 tasks.remove(on_cpu)
                 html += '<div style="float: left; text-align: center; width: 10px; height: 20px; background-color:' + html_color['Finish'] + ';"></div>'
-                print "Finish!" ,
-            else:
-				print "TBD"
+               # print "Finish!" ,
+          #  else:
+			#	print "TBD"
         else:
             print 'No task uses the processor. '
             html += '<div style="float: left; text-align: center; width: 110px; height: 20px; background-color:' + html_color['Empty'] + ';">Empty</div>'
@@ -151,7 +160,7 @@ if __name__ == '__main__':
     # Print Waiting time and turnaround time calculations:
     b_t=[]
     processes=[]
-    for d in range(0, 5):
+    for d in range(0, 25):
     	print done_list[d].name, done_list[d+1].bt, "\n"
     	b_t.append(done_list[d].bt)
     	processes.append(done_list[d].name)
@@ -160,7 +169,7 @@ if __name__ == '__main__':
     avgwt=0  #average of waiting time
     tat=[]    #tat stands for turnaround time
     avgtat=0   #average of total turnaround time
-    n=len(done_list)
+    n=len(b_t)
     wt.insert(0,0)
     tat.insert(0,b_t[0])
     for i in range(1,len(b_t)):
