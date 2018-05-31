@@ -1,18 +1,36 @@
 Content-type:text/html
 
 RunTime	Name	Arrival	BT	Start	USE	PRI	END	STATUS 
-Utilization error!No task uses the processor. 
-1	T1	1	7	1	1	11	2	 
-2	T1	1	7	2	1	11	3	 
-3	T1	1	7	3	1	11	4	 
-4	T1	1	7	4	1	11	5	 
-5	T1	1	7	5	1	11	6	 
-6	T1	1	7	6	1	11	7	 
-7	T1	1	7	7	1	11	8	Finish
-8	T2	2	5	8	1	12	9	 
-9	T2	2	5	9	1	12	10	 
-T2#743 is dropped due to overload! 
-T3#5857 is dropped due to overload! 
-T4#235 is dropped due to overload! 
-T5#4185 is dropped due to overload! 
-T6#6939 is dropped due to overload! 
+0	T1	0	7	0	1	33	1	 
+1	T2	1	5	1	1	29	2	 
+2	T2	1	5	2	1	29	3	 
+3	T2	1	5	3	1	29	4	 
+4	T2	1	5	4	1	29	5	 
+5	T2	1	5	5	1	29	6	Finish
+6	T3	2	3	6	1	31	7	 
+7	T3	2	3	7	1	31	8	 
+8	T3	2	3	8	1	31	9	Finish
+9	T4	3	1	9	1	32	10	Finish
+10	T1	0	7	10	1	33	11	 
+11	T1	0	7	11	1	33	12	 
+12	T1	0	7	12	1	33	13	 
+13	T1	0	7	13	1	33	14	 
+14	T1	0	7	14	1	33	15	 
+15	T1	0	7	15	1	33	16	Finish
+16	T5	4	2	16	1	33	17	 
+17	T5	4	2	17	1	33	18	Finish
+18	T6	5	1	18	1	34	19	Finish
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 

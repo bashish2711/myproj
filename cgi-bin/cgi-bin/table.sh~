@@ -1,4 +1,0 @@
-#!/bin/bash
-echo "Content-type:text/html\r\n\r\n"
-python txtHtml.py
-cat output.html

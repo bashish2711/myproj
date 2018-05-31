@@ -2,7 +2,7 @@
 
 import cgi, os
 import cgitb; cgitb.enable()
-
+print "Content-Type: text/html\n"
 form = cgi.FieldStorage()
 
 # Get filename here.
@@ -14,7 +14,8 @@ if fileitem.filename:
    fn = os.path.basename(fileitem.filename)
    # for windows machine:
    #fn = os.path.basename(fileitem.filename.replace("\\", "/" ))
-   path = open('/tmp/' + "sampletasks.txt", 'wb')
+   tasks = "deftask"
+   path = open('/temp/' + tasks, 'wb')
    path.write(fileitem.file.read())
    message = 'The file "' + fn + '" was uploaded successfully'
 
@@ -22,11 +23,10 @@ else:
    message = 'No file was uploaded'
    
 print """\
-Content-Type: text/html\n
 <html>
 <body>
    <p>%s</p>
-   <p> You can access file %s now  </p>
+   <p> You can access file <a href=/cgi-bin/txtHtml.py?in=%s&out=customTaskOut target=_new>%s</a> now  </p>
 </body>
 </html>
-""" % (message, fn, fn)
+""" % (message,tasks, fn)

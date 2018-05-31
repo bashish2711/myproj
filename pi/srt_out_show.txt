@@ -20,17 +20,17 @@ RunTime	Name	Arrival	BT	Start	USE	PRI	END	STATUS
 16	T1	0	7	16	1	12	17	 
 17	T1	0	7	17	1	13	18	 
 18	T1	0	7	18	1	14	19	Finish
-19	 No task uses the processor. 
-20	 No task uses the processor. 
-21	 No task uses the processor. 
-22	 No task uses the processor. 
-23	 No task uses the processor. 
-24	 No task uses the processor. 
-25	 No task uses the processor. 
-26	 No task uses the processor. 
-27	 No task uses the processor. 
-28	 No task uses the processor. 
-29	 No task uses the processor. 
-30	 No task uses the processor. 
-31	 No task uses the processor. 
-32	 No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
