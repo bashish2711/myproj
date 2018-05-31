@@ -1,0 +1,3 @@
+ 'RMS', 'EDF', 'LLF', 'RR', 'PRR', 'FCFS', 'SPN', 'SRT', 'HRRN', 'MLFQ'
+ {'RMS':'rm.py', 'EDF':'edf.py', 'LLF':'llf.py', 'RR':'rr.py', 'PRR':'prr.py', 'FCFS':'fcfs.py', 'SPN':'spn.py', 'SRT':'srt.py', 'HRRN':hrrn.py', 'MLFQ':'mlfq.py'}
+ 

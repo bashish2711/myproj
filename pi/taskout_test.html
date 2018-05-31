@@ -1,0 +1,131 @@
+<html>
+<title>Simulator Results</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/Aux/w3/w3.css"> 
+<link rel="stylesheet" href="/Aux/w3/new.css"> 
+<link rel="stylesheet" href="/Aux/w3/w3-theme-black.css">
+<link rel="stylesheet" href="/Aux/w3/Roboto.css">
+<link rel="stylesheet" href="/Aux/w3/font-awesome.min.css">
+<head>
+<script>
+function runner(sched) {
+    document.getElementById("result").value = sched;
+    var x = document.getElementById("tasktable")
+            switch(sched) {
+    case "RMS":
+        {x.src = "info/rmsinfo.html";}
+        break;
+    case "EDF":
+        {x.src = "info/edfinfo.html";}
+        break;
+    case "LLF":
+        {x.src = "info/llfinfo.html";}
+        break;
+    case "RR":
+        {x.src = "info/rrinfo.html";}
+        break;
+    case "PRR":
+        {x.src = "info/prrinfo.html";}
+        break;
+    case "FCFS":
+        {x.src = "info/fcfsinfo.html";}
+        break;
+    case "SPN":
+        {x.src = "info/spninfo.html";}
+        break;
+    case "SRT":
+        {x.src = "info/srtinfo.html";}
+        break;
+    case "HRRN":
+        {x.src = "info/hrrninfo.html";}
+        break;
+    case "MLFQ":
+        {x.src = "info/mlfqinfo.html";}
+        break;
+    default:
+        {x.src = "";}
+} 
+}
+function taskcheck() {
+var y = document.getElementById("algo_post")
+var z = document.getElementById("t_check").checked
+    if (z)
+     { y.action = "cgi-bin/taskout.py" 
+      alert("Using Default Task Table"); }
+    else 
+    { var cust;
+    if (confirm("Use Custom Task Table ? ")) {
+        y.action = "cgi-bin/taskshow.py" 
+        cust = "Using Custom Task Table";
+    } else {
+        cust = "Using Default Task Table";
+        y.action = "cgi-bin/taskout.py"
+    } }
+}
+</script>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()">
+    <i class="fa fa-bars"></i> </a>   
+    <a href="../index.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">HOME</a>
+    <a href="../theory.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">THEORY</a>
+    <a href="../simulator.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">SIMULATOR</a>
+    <a href="../pi.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">RASPBERRY PI</a>
+  </div>
+</div>
+<div class="w3-main">
+  <div class="w3-row w3-padding-64">
+
+	<h2 class="w3-text-teal" id="tasktable" > Task Table </h2>
+        Selected Algorithm is:   <input type="text" id="result" value=FCFS >
+        FCFS Will be executed. 
+        
+ 	<center> 
+ 	    <p>
+ 	    <iframe name="tasktable" input type="text" id="info" width=95% height="300px" src="">
+      	</iframe>
+        <iframe name="task" input type="text" id="info" width=95% height="300px" src="">
+      	</iframe>
+        </center>
+    </div>
+  </div>
+
+<center>
+<form id="algomore" name="algomore" action="" method="post">
+
+    <input type="radio" class="w3-radio" id= MLFQ value= MLFQ  name="algorithm" onclick="runner(this.value)"> MLFQ </input>
+     
+    <input type="radio" class="w3-radio" id= RMS value= RMS  name="algorithm" onclick="runner(this.value)"> RMS </input>
+     
+    <input type="radio" class="w3-radio" id= EDF value= EDF  name="algorithm" onclick="runner(this.value)"> EDF </input>
+     
+    <input type="radio" class="w3-radio" id= SPN value= SPN  name="algorithm" onclick="runner(this.value)"> SPN </input>
+     
+    <input type="radio" class="w3-radio" id= RR value= RR  name="algorithm" onclick="runner(this.value)"> RR </input>
+     
+    <input type="radio" class="w3-radio" id= PRR value= PRR  name="algorithm" onclick="runner(this.value)"> PRR </input>
+     
+    <input type="radio" class="w3-radio" id= FCFS value= FCFS  name="algorithm" onclick="runner(this.value)"> FCFS </input>
+     
+    <input type="radio" class="w3-radio" id= SRT value= SRT  name="algorithm" onclick="runner(this.value)"> SRT </input>
+     
+    <input type="radio" class="w3-radio" id= LLF value= LLF  name="algorithm" onclick="runner(this.value)"> LLF </input>
+     
+    <input type="radio" class="w3-radio" id= HRRN value= HRRN  name="algorithm" onclick="runner(this.value)"> HRRN </input>
+     
+<p>
+<button class="w3-button w3-black w3-hover-green">Select</button>
+</form>    
+</center>
+
+</body>
+
+
+</html>
+
+

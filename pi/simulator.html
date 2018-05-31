@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<title>Thesis</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/Aux/w3/w3.css"> <!--relative path dosn't work -->
+<link rel="stylesheet" href="/Aux/w3/new.css"> <!--relative path dosn't work -->
+<link rel="stylesheet" href="/Aux/w3/w3-theme-black.css">
+<link rel="stylesheet" href="/Aux/w3/Roboto.css">
+<link rel="stylesheet" href="/Aux/w3/font-awesome.min.css">
+<head> 
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()">
+    <i class="fa fa-bars"></i> </a>   
+    <a href="index.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">HOME</a>
+    <a href="theory.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">THEORY</a>
+    <a href="simulator.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">SIMULATOR</a>
+    <a href="pi.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">RASPBERRY PI</a>
+  </div>
+</div>
+
+ <div class="w3-main">
+  <div class="w3-row w3-padding-64">
+    <div class="w3-container w3-quarter">
+      <h2 class="w3-text-teal" id="H3" >Simulator Page </h2>
+      <p> Select a Scheduling Algorithm</p>
+      <form id="algo_post" name="algo_post" action="" method="post" target="deftable"  >
+   	  <fieldset>
+  	  <legend>Select an Algorithm</legend>
+	<input type="radio" onclick="myFunction(this.value)" value="RMS"  name="algo" checked> RMS <br>
+	 <input type="radio" onclick="myFunction(this.value)" value="EDF" name="algo"> EDF <br>
+	 <input type="radio" onclick="myFunction(this.value)" value="LLF" name="algo"> LLF  <br>
+	 <input type="radio" onclick="myFunction(this.value)" value="DM" name="algo"> DM <br>
+ 	 <input type="radio" onclick="myFunction(this.value)" value="RR" name="algo"> RR <br>
+ 	 <input type="radio" onclick="myFunction(this.value)" value="PRR" name="algo"> PRR <br>
+ 	 <input type="radio" onclick="myFunction(this.value)" value="FCFS" name="algo"> FCFS <br>	 
+ 	 <input type="radio" onclick="myFunction(this.value)"  value="SPN" name="algo"> SPN <br>
+	 <input type="radio" onclick="myFunction(this.value)"  value="SRT" name="algo"> SRT <br>	
+	 <input type="radio" onclick="myFunction(this.value)" value="HRRN" name="algo"> HRRN <br>
+	 <input type="radio" onclick="myFunction(this.value)"  value="MLFQ" name="algo"> MLFQ <br>
+	</fieldset>
+	      Selected Algorithm is: <input type="text" id="result" value="RMS">
+      </form>
+    </div>
+    <div class="w3-threequarter w3-container">
+	<!--h2 class="w3-text-teal" id="H3" > Algorithm Details </h2-->
+
+ 	    <iframe name="Iframe1" input type="text" id="info" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="info/rmsinfo.html">
+      	</iframe>
+      	<a class="w3-button w3-black w3-hover-green" id="deftask1" name="deftask1" href="/cgi-bin/txtHtml.py?in=deftask1&out=deftask1out" onclick="checktable(this.name)" target="deftable" >Task Table 1 </a><!-- call iframe by name -->
+      	<a class="w3-button w3-black w3-hover-green" id="deftask2" onclick="checktable(this.name)" name="deftask2" href="/cgi-bin/txtHtml.py?in=deftask2&out=deftask2out" target="deftable" >Task Table 2 </a>
+      	<a class="w3-button w3-black w3-hover-green" id="deftask3"  onclick="checktable(this.name)" name="deftask3" href="/cgi-bin/txtHtml.py?in=deftask3&out=deftask3out" target="deftable" >Task Table 3 </a>
+      	<a class="w3-button w3-black w3-hover-green" id="deftask4"  onclick="checktable(this.name)" name="deftask4" href="/cgi-bin/txtHtml.py?in=deftask4&out=deftask4out" target="deftable" >Task Table 4 </a>
+      	<a class="w3-button w3-black w3-hover-green" id="deftask5" onclick="checktable(this.name)" name="deftask5" href="/cgi-bin/txtHtml.py?in=deftask5&out=deftask5out" target="deftable" >Task Table 5 </a>
+      	<a class="w3-button w3-black w3-hover-green" id="deftask6" name="deftask" onclick="checktable(this.name)" href="upload.html" target="deftable" >Custom Task Table</a><!-- call iframe by name -->
+    
+        <iframe name="deftable" input type="text" id="info" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="info/taskchooseinfo.html">
+      	</iframe>
+      	<form action="/cgi-bin/taskparse.py" method="post" >
+      	<button class="w3-button w3-black w3-hover-green"  id="tableselected" name="tableselected" target="_new" >Schedule using this Table >> </button>
+      	 <input type="hidden" id="which_algo" name="which_algo" value="algorithm">
+      	 <input type="hidden" id="which_table" name="which_table" value="deftask1">
+      	</div>
+    </div>
+  </div>
+  <footer id="myFooter">
+    <div class=" w3-bottombar w3-container w3-theme-l2 w3-padding-small">
+      <h4>Footer</h4>
+    </div>
+  </footer>
+
+<!-- END MAIN -->
+</div>
+<script>
+function myFunction(sched) {
+    document.getElementById("result").value = sched;
+    var x = document.getElementById("info")
+    document.getElementById("which_algo").value = sched;
+    var a = document.getElementById("info")
+            switch(sched) {
+    case "RMS":
+        {x.src = "info/rmsinfo.html";}
+        break;
+    case "EDF":
+        {x.src = "info/edfinfo.html";}
+        break;
+    case "DM":
+        {x.src = "info/dminfo.html";}
+        break;
+    case "LLF":
+        {x.src = "info/llfinfo.html";}
+        break;
+    case "RR":
+        {x.src = "info/rrinfo.html";}
+        break;
+    case "PRR":
+        {x.src = "info/prrinfo.html";}
+        break;
+    case "FCFS":
+        {x.src = "info/fcfsinfo.html";}
+        break;
+    case "SPN":
+        {x.src = "info/spninfo.html";}
+        break;
+    case "SRT":
+        {x.src = "info/srtinfo.html";}
+        break;
+    case "HRRN":
+        {x.src = "info/hrrninfo.html";}
+        break;
+    case "MLFQ":
+        {x.src = "info/mlfqinfo.html";}
+        break;
+    deftask:
+        {x.src = "";}
+} 
+}
+function checktable(tt) {
+    document.getElementById("which_table").value = tt;
+} 
+
+</script>
+</body>
+</html>
+

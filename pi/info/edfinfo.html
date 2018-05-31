@@ -1,0 +1,21 @@
+<html>
+<link rel="stylesheet" href="http://localhost/Aux/w3/w3.css">
+<body>
+
+<h3 class="w3-text-teal" id="edfinfo" > Earliest Deadline First </h3>
+<p>
+Earliest Deadline First is dynamic preemptive scheduling algorithm, in which the priority of task us assigned according to absolute deadline.
+This deadline is also compared every time the new task is added.
+</p>
+<li class="w3-text-teal" ><b>Advantages</b></li>
+<ol> This is optimal scheduling, means if a task missed deadline the processor is 100% in use.
+</ol><ol> Best Suited for periodic Tasks
+</ol><ol> EDF can be used upto 100% utilization bound
+</ol><ol> It ensure no deadline miss according to the utilization bound.
+</ol>
+<li class="w3-text-teal" > <b>Disadvantages </b></li>
+<ol>Not all real time tasks are periodic and if the period is not known these policies can not be used.
+</ol><ol> In case the utilization upper bound of EDF is not satisfied the tasks are not schedulable.
+</ol>
+</body>
+</html>

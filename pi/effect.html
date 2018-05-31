@@ -1,0 +1,316 @@
+<div id="slider">
+                     <div id="mask">
+                     <ul>
+                     <li id="first" class="firstanimation">
+                     <a href="#"> <img src="images/turtleSlider/tur1.jpg" alt="Turtle"/> </a>
+                     <div class="tooltip"> <h1>Turtle</h1> </div>
+                     </li>
+
+                     <li id="second" class="secondanimation">
+                     <a href="#"> <img src="images/turtleSlider/tur2.jpg" alt="Turtle"/> </a>
+                     <div class="tooltip"> <h1>My Dad Tomas & A Turtle</h1> </div>
+                     </li>
+
+                     <li id="third" class="thirdanimation">
+                     <a href="#"> <img src="images/turtleSlider/tur3.jpg" alt="Turtle"/> </a>
+                     <div class="tooltip"> <h1>Turtle</h1> </div>
+                     </li>
+
+                     <li id="fourth" class="fourthanimation">
+                     <a href="#"> <img src="images/turtleSlider/tur4.jpg" alt="Turtle"/> </a>
+                     <div class="tooltip"> <h1>Me & A Turtle</h1> </div>
+                     </li>
+
+                     <li id="fifth" class="fifthanimation">
+                     <a href="#"> <img src="images/turtleSlider/tur5.jpg" alt="Turtle"/> </a>
+                     <div class="tooltip"> <h1>Turtle</h1> </div>
+                     </li>
+                     </ul>
+
+                     </div>
+                     <div class="progress-bar"></div>
+                  </div>
+               </div>
+               
+<style>
+
+html{ 
+  background: url(../images/background.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+body{
+    font-family:"Open Sans", serif;
+    margin: 30px 15% 20px 15%;
+    min-width: 1010px;
+}
+
+    #slider {
+   border: 5px solid #eaeaea;
+   box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+   height: 500px;
+   width: 667px;
+   overflow: visible;
+   position: relative;
+   float: left;
+}
+#mask {
+   overflow: hidden;
+   height: 500px;
+}
+#slider ul {
+   margin: 0;
+   padding: 0;
+   position: relative;
+}
+#slider li {
+   width: 667px;  /* Width Image */
+   height: 500px; /* Height Image */
+   position: absolute;
+   top: -505px; /* Original Position - Outside of the Slider */
+   list-style: none;
+}
+#slider li.firstanimation {
+   -webkit-animation: cycle 25s linear infinite;
+   -moz-animation: cycle 25s linear infinite;
+   animation: cycle 25s linear infinite;
+}
+#slider li.secondanimation {
+   -webkit-animation: cycletwo 25s linear infinite;
+   -moz-animation: cycletwo 25s linear infinite;
+   animation: cycletwo 25s linear infinite;
+}
+#slider li.thirdanimation {
+   -webkit-animation: cyclethree 25s linear infinite;
+   -moz-animation: cyclethree 25s linear infinite;
+   animation: cyclethree 25s linear infinite;
+}
+#slider li.fourthanimation {
+   -webkit-animation: cyclefour 25s linear infinite;
+   -moz-animation: cyclefour 25s linear infinite;
+   animation: cyclefour 25s linear infinite;
+}
+#slider li.fifthanimation {
+   -webkit-animation: cyclefive 25s linear infinite;
+   -moz-animation: cyclefive 25s linear infinite;
+   animation: cyclefive 25s linear infinite;
+}
+@-webkit-keyframes cycle {
+    0%  { top:0px; }
+    4%  { top:0px; }
+    16% { top:0px; opacity:1; z-index:0; } 
+    20% { top:505px; opacity:0; z-index:0; }
+    21% { top:-505px; opacity:0; z-index:-1; }
+    50% { top:-505px; opacity:0; z-index:-1; }
+    92% { top:-505px; opacity:0; z-index:0; }
+    96% { top:-505px; opacity:0; }
+    100%{ top:0px; opacity:1; }
+
+}
+@-webkit-keyframes cycletwo {
+    0%  { top:-505px; opacity:0; }
+    16% { top:-505px; opacity:0; }
+    20% { top:0px; opacity:1; }
+    24% { top:0px; opacity:1; } 
+    36% { top:0px; opacity:1; z-index:0; } 
+    40% { top:505px; opacity:0; z-index:0; }
+    41% { top:-505px; opacity:0; z-index:-1; }  
+    100%{ top:-505px; opacity:0; z-index:-1; }
+}
+@-webkit-keyframes cyclethree {
+    0%  { top:-505px; opacity:0; }
+    36% { top:-505px; opacity:0; }
+    40% { top:0px; opacity:1; }
+    44% { top:0px; opacity:1; } 
+    56% { top:0px; opacity:1; z-index:0; } 
+    60% { top:505px; opacity:0; z-index:0; } 
+    61% { top:-505px; opacity:0; z-index:-1; }
+    100%{ top:-505px; opacity:0; z-index:-1; }
+}
+@-webkit-keyframes cyclefour {
+    0%  { top:-505px; opacity:0; }
+    56% { top:-505px; opacity:0; }
+    60% { top:0px; opacity:1; }
+    64% { top:0px; opacity:1; }
+    76% { top:0px; opacity:1; z-index:0; }
+    80% { top:505px; opacity:0; z-index:0; }
+    81% { top:-505px; opacity:0; z-index:-1; }
+    100%{ top:-505px; opacity:0; z-index:-1; }
+}
+@-webkit-keyframes cyclefive {
+    0%  { top:-505px; opacity:0; }
+    76% { top:-505px; opacity:0; }
+    80% { top:0px; opacity:1; }
+    84% { top:0px; opacity:1; }
+    96% { top:0px; opacity:1; z-index:0; }
+    100%{ top:505px; opacity:0; z-index:0; }
+}
+@-moz-keyframes cycle {
+    0%  { top:0px; }
+    4%  { top:0px; } 
+    16% { top:0px; opacity:1; z-index:0; } 
+    20% { top:505px; opacity:0; z-index:0; } 
+    21% { top:-505px; opacity:0; z-index:-1; }
+    92% { top:-505px; opacity:0; z-index:0; }
+    96% { top:-505px; opacity:0; }
+    100%{ top:0px; opacity:1; }
+}
+@-moz-keyframes cycletwo {
+    0%  { top:-505px; opacity:0; }
+    16% { top:-505px; opacity:0; }
+    20% { top:0px; opacity:1; }
+    24% { top:0px; opacity:1; } 
+    36% { top:0px; opacity:1; z-index:0; } 
+    40% { top:505px; opacity:0; z-index:0; }
+    41% { top:-505px; opacity:0; z-index:-1; } 
+    100%{ top:-505px; opacity:0; z-index:-1; }
+}
+@-moz-keyframes cyclethree {
+    0%  { top:-505px; opacity:0; }
+    36% { top:-505px; opacity:0; }
+    40% { top:0px; opacity:1; }
+    44% { top:0px; opacity:1; } 
+    56% { top:0px; opacity:1; } 
+    60% { top:505px; opacity:0; z-index:0; }
+    61% { top:-505px; opacity:0; z-index:-1; } 
+    100%{ top:-505px; opacity:0; z-index:-1; }
+}
+@-moz-keyframes cyclefour {
+    0%  { top:-505px; opacity:0; }
+    56% { top:-505px; opacity:0; }
+    60% { top:0px; opacity:1; }
+    64% { top:0px; opacity:1; }
+    76% { top:0px; opacity:1; z-index:0; }
+    80% { top:505px; opacity:0; z-index:0; }
+    81% { top:-505px; opacity:0; z-index:-1; }
+    100%{ top:-505px; opacity:0; z-index:-1; }
+}
+@-moz-keyframes cyclefive {
+    0%  { top:-505px; opacity:0; }
+    76% { top:-505px; opacity:0; }
+    80% { top:0px; opacity:1; }
+    84% { top:0px; opacity:1; }
+    96% { top:0px; opacity:1; z-index:0; }
+    100%{ top:505px; opacity:0; z-index:0; }
+}
+@keyframes cycle {
+   0%  { top: 0px; } /* When you start the slide, the first image is already visible */
+   4%  { top: 0px; } /* Original Position */
+   16% { top: 0px; opacity:1; z-index:0; } /* From 4% to 16 % = for 3 seconds the image is visible */
+   20% { top: 505px; opacity: 0; z-index: 0; } /* From 16% to 20% = for 1 second exit image */
+   21% { top: -505px; opacity: 0; z-index: -1; } /* Return to Original Position */
+   92% { top: -505px; opacity: 0; z-index: 0; }
+   96% { top: -505px; opacity: 0; } /* From 96% to 100% = for 1 second enter image*/
+   100%{ top: 0px; opacity: 1; }
+}
+@keyframes cycletwo {
+   0%  { top: -505px; opacity: 0; } /* Original Position */
+   16% { top: -505px; opacity: 0; }/* Starts moving after 16% to this position */
+   20% { top: 0px; opacity: 1; }
+   24% { top: 0px; opacity: 1; }  /* From 20% to 24% = for 1 second enter image*/
+   36% { top: 0px; opacity: 1; z-index: 0; }   /* From 24% to 36 % = for 3 seconds the image is visible */
+   40% { top: 505px; opacity: 0; z-index: 0; } /* From 36% to 40% = for 1 second exit image */
+   41% { top: -505px; opacity: 0; z-index: -1; }   /* Return to Original Position */
+   100%{ top: -505px; opacity: 0; z-index: -1; }
+}
+@keyframes cyclethree {
+   0%  { top: -505px; opacity: 0; }
+   36% { top: -505px; opacity: 0; }
+   40% { top: 0px; opacity: 1; }
+   44% { top: 0px; opacity: 1; }
+   56% { top: 0px; opacity: 1; }
+   60% { top: 505px; opacity: 0; z-index: 0; }
+   61% { top: -505px; opacity: 0; z-index: -1; }
+   100%{ top: -505px; opacity: 0; z-index: -1; }
+}
+@keyframes cyclefour {
+   0%  { top: -505px; opacity: 0; }
+   56% { top: -505px; opacity: 0; }
+   60% { top: 0px; opacity: 1; }
+   64% { top: 0px; opacity: 1; }
+   76% { top: 0px; opacity: 1; z-index: 0; }
+   80% { top: 505px; opacity: 0; z-index: 0; }
+   81% { top: -505px; opacity: 0; z-index: -1; }
+   100%{ top: -505px; opacity: 0; z-index: -1; }
+}
+@keyframes cyclefive {
+   0%  { top: -505px; opacity: 0; }
+   76% { top: -505px; opacity: 0; }
+   80% { top: 0px; opacity: 1; }
+   84% { top: 0px; opacity: 1; }
+   96% { top: 0px; opacity: 1; z-index: 0; }
+   100%{ top: 505px; opacity: 0; z-index: 0; }
+}
+.progress-bar {
+   position: relative;
+   top: -5px;
+   width: 750px;
+   height: 5px;
+   background: #000;
+   -webkit-animation: fullexpand 25s ease-out infinite;
+   -moz-animation: fullexpand 25s ease-out infinite;
+   animation: fullexpand 25s ease-out infinite;
+}
+@-webkit-keyframes fullexpand {
+   0%, 20%, 40%, 60%, 80%, 100% { width: 0%; opacity: 0; }
+   4%, 24%, 44%, 64%, 84% { width: 0%; opacity: 0.3; }
+   16%, 36%, 56%, 76%, 96% { width: 100%; opacity: 0.7; }
+   17%, 37%, 57%, 77%, 97% { width: 100%; opacity: 0.3; }
+   18%, 38%, 58%, 78%, 98% { width: 100%; opacity: 0; }
+}
+@-moz-keyframes fullexpand {
+   0%, 20%, 40%, 60%, 80%, 100% { width: 0%; opacity: 0; }
+   4%, 24%, 44%, 64%, 84% { width: 0%; opacity: 0.3; }
+   16%, 36%, 56%, 76%, 96% { width: 100%; opacity: 0.7; }
+   17%, 37%, 57%, 77%, 97% { width: 100%; opacity: 0.3; }
+   18%, 38%, 58%, 78%, 98% { width: 100%; opacity: 0; }
+}
+@keyframes fullexpand {
+   /* In these keyframes, the progress-bar is stationary */
+   0%, 20%, 40%, 60%, 80%, 100% { width: 0%; opacity: 0; }
+
+   /* In these keyframes, the progress-bar starts to come alive */
+   4%, 24%, 44%, 64%, 84% { width: 0%; opacity: 0.3; }
+
+   /* In these keyframes, the progress-bar moves forward for 3 seconds */
+   16%, 36%, 56%, 76%, 96% { width: 100%; opacity: 0.7; }
+
+   /* In these keyframes, the progress-bar has finished his path */
+   17%, 37%, 57%, 77%, 97% { width: 100%; opacity: 0.3; }
+
+   /* In these keyframes, the progress-bar will disappear and then resume the cycle */
+   18%, 38%, 58%, 78%, 98% { width: 100%; opacity: 0; }
+}
+#slider:hover .progress-bar {
+   -webkit-animation-play-state: paused;
+   -moz-animation-play-state: paused;
+   animation-play-state: paused;
+}
+#slider .tooltip {
+   background: rgba(0,0,0,0.7);
+   width: 300px;
+   height: 60px;
+   position: relative;
+   bottom: 75px;
+   left: -320px;
+   transition: all 0.3s ease-in-out;
+}
+#slider .tooltip h1 {
+   color: #fff;
+   font-size: 24px;
+   font-weight: 300;
+   line-height: 60px;
+   padding: 0 0 0 10px;
+   text-align: Right;
+   margin-right: 10px;
+}
+#slider li#first:hover .tooltip,
+#slider li#second:hover .tooltip,
+#slider li#third:hover .tooltip,
+#slider li#fourth:hover .tooltip,
+#slider li#fifth:hover .tooltip {
+   left: 0px;
+}
+</style>

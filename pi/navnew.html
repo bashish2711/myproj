@@ -1,0 +1,120 @@
+<html>
+<head> </head>
+
+<body>
+Hi there
+<div class="menu">
+     
+        <ul>
+            <li><a href="#">More Examples</a>
+                <ul>
+                    <li><a href="http://www.ajaxshake.com/en/JS/1111/jquery.html">Plugins and jQuery Examples</a></li>
+                    <li><a href="http://www.ajaxshake.com/en/JS/1121/prototype.html">Prototype Examples</a></li>
+                    <li><a href="http://www.ajaxshake.com/en/JS/12111/mootools.html">Mootools Examples</a></li>
+                    <li><a href="http://www.ajaxshake.com/en/JS/12421/pure-javascript.html">Javascript Examples</a></li>
+                </ul>
+            </li>
+        </ul>
+     
+</div>
+</body>
+</html>
+
+<style>
+body{
+    padding:0;
+    margin:0;
+}
+.menu{
+      font: 13px/27px Arial,sans-serif;
+ 
+      color:#3366CC;
+      height:30px;
+      background: url(back.gif) repeat-x;
+}
+.menu a:hover{
+    background-color:#e4ebf8;
+}
+.menu a {
+    text-decoration: none;
+    padding: 4px 8px 7px;
+    color:#3366CC;
+    outline:none;
+}
+.menu ul{
+    list-style: none;
+    margin:0;
+    padding:0 0 0 10px;
+}
+.menu ul li{
+    padding:0;
+    float:left;
+ 
+}
+.menu ul li ul li{
+    padding:0;
+    float:none;
+    margin: 0 0 0 0px;
+    width:100%;
+}
+.menu ul li ul{
+    position: absolute;
+    border: 1px solid #C3D1EC;
+    box-shadow: 0 1px 5px #CCCCCC;
+    margin-top: -1px;
+    display:none;
+    padding: 0px 16px 0px 0;
+}
+.active ul{
+    display:block !important;
+}
+.active a{
+    background-color: white;
+    border: 1px solid #C3D1EC;
+    border-bottom: 0;
+    box-shadow: 0 -1px 5px #CCCCCC;
+    display: block;
+    height: 29px;
+    padding: 0 8px 0 8px;
+    position:relative;
+    z-index: 1;
+}
+.active a:hover{
+    background-color:white;
+}
+.active ul a:hover{
+    background-color:#e4ebf8;
+}
+ 
+.active ul a{
+    border: 0 !important;
+    box-shadow: 0 0 0 #CCCCCC;
+    border:0;
+    width: 100%;
+}
+.arrow {
+    border-color: #3366CC transparent transparent;
+    border-style: solid dashed dashed;
+    margin-left: 5px;
+    position: relative;
+    top: 10px;
+}
+</style>
+<script>
+(function($){
+    $.fn.fixedMenu=function(){
+        return this.each(function(){
+            var menu= $(this);
+            menu.find('ul li > a').bind('click',function(){
+            if ($(this).parent().hasClass('active')){
+                $(this).parent().removeClass('active');
+            }
+            else{
+                $(this).parent().parent().find('.active').removeClass('active');
+                $(this).parent().addClass('active');
+            }
+            })
+        });
+    }
+})(jQuery);
+</script>

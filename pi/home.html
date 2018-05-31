@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+
+<html>
+
+<head>
+	<!-- Suporte a UTF-8 -->
+	<meta charset="UTF-8">
+
+	<!-- Titulo -->
+	<title>I3S: Interactive Systems Scheduling Simulator</title>
+	<!-- jQuery -->
+	<script src="util/jquery-2.1.4.min.js"></script>
+		
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	
+	<style>
+	@font-face {
+	    font-family: 'ponderosa';
+	    src: url('util/ponderosa/ponde___.ttf');
+	}
+	</style>
+	
+</head>
+
+<body style="padding-bottom: 66px;">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+				<a class="navbar-brand" href="#">
+					<img src="img/logo.png" width="60" height="42" style="margin-top:-12px;"/>
+				</a>
+            </div>
+
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Simulator</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+            
+            <form class="navbar-form navbar-right">
+			<p><a href="index.php?lang=pt">Português</a>
+						 <a href="index.php?lang=en"style="text-decoration: underline">English</a>
+					</p>            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+		<!-- Tab items list -->
+		<ul id="diveInfo" class="nav nav-tabs nav-justified" role="tablist">
+			<li class="active">
+				<a href="#tab_algorithm" role="tab" data-toggle="tab"> 1 - Choose the scheduling algorithm </a>
+			</li>
+
+			<li>
+				<a href="#tab_processes" role="tab" data-toggle="tab"> 2 - Add processes to be scheduled </a>
+			</li>
+
+			<li>
+				<a href="#tab_parameters" role="tab" data-toggle="tab"> 3 - Global parameters for simulation (optional) </a>
+			</li>
+
+			<li>
+				<a href="#tab_simulation" role="tab" data-toggle="tab" onclick="tab_simulation()"> 4 - Simulation </a>
+			</li>
+		</ul>
+
+		<!-- Tab contents, when selected -->
+		<div class="tab-content">
+			<div class="tab-pane active" id="tab_algorithm">
+				<div class="panel panel-primary">
+					<!-- Panel Header -->
+				    <div class="panel-heading">
+				        <h4>1 - Choose the scheduling algorithm</h4>
+				    </div>
+
+					<!-- Panel Body -->
+				    <div class="panel-body">
+					<div class="row">
+						<div class="row-eq-height">
+
+							<!-- First Column Start -->
+							<div class="col-md-5" >	
+							<p style="font-weight: bold;"><input type="radio" name="algoritimo" checked value=round_robin onclick="selecionaAlgoritimo()">Round-robin scheduling</p><p style="font-weight: bold;"><input type="radio" name="algoritimo" value=queues onclick="selecionaAlgoritimo()">Multiple queues</p><p style="font-weight: bold;"><input type="radio" name="algoritimo" value=priority onclick="selecionaAlgoritimo()">Priority scheduling</p><p style="font-weight: bold;"><input type="radio" name="algoritimo" value=shortest onclick="selecionaAlgoritimo()">Shortest process next or Shortest Job First (SJF)</p><p style="font-weight: bold;"><input type="radio" name="algoritimo" value=lotery onclick="selecionaAlgoritimo()">Lottery scheduling</p>							</div>
+							<!-- First Column End -->
+
+							<!-- Second Column Start -->
+							<div class="col-md-7">
+								<!-- Breve descricao do algoritimo-->
+								<h4 id="titulo_algoritimo"></h4>
+								<p id="descricao_algoritimo"></p>
+					
+								<!-- Suas vantanges-->
+								<h4> Advantages </h4>
+								<p id="vantagens_algoritimo"></p>
+					
+								<!-- e desvantagens-->
+								<h4> Disadvantages </h4>
+								<p id="desvantagens_algoritimo"></p>
+							</div>
+							<!-- Second Column End-->
+						</div>
+					</div>
+					</div>
+
+					<!-- Footer -->
+				    <div class="panel-footer">
+				    	How to Use I3S: Choose an algorithm at this tab, add processes at the second tab and simulate at the forth.				    </div>
+        		</div>
+			</div>
+
+			<!-- Second Tab -->
+			<div class="tab-pane" id="tab_processes">
+				<div class="panel panel-primary">
+					<!-- Panel Header -->
+					<div class="panel-heading">
+				        <h4>2 - Add processes to be scheduled</h4>
+					</div>
+
+					<!-- Panel Body -->
+					<div class="panel-body">
+						<div class="row">
+						<div class="row-eq-height">
+							<div class="col-md-5">
+								<!-- Menu para adicionar novos processos -->
+				                <h4>Runtime</h4><input class="form-control" type="text" id="execution_time" placeholder="Execution time (between 1 and 100)" onfocus="tempoExecucaoSelecionado()" size="34 " maxlength="3">						
+								<!-- CPU ou IO bound -->
+								<div>
+									<h4>Process type</h4>									<p><input type="radio" name="bound" value="cpu" checked onclick="tipoSelecionado()">CPU-bound</p>
+									<p><input type="radio" name="bound" value="io" onclick="tipoSelecionado()">I/O-bound</p>
+								</div>			
+								
+								<!-- Campo opcional para alguns algoritimos -->
+								<div>
+									<h4  id="titulo_opcional" hidden="true"></h4>
+									<input class="form-control" type="text" id="valor_opcional" placeholder="prioridade ou tickets" hidden="true" onfocus="valorOpcionalSelecionado()">
+								</div>	
+			
+								<!-- Dar uma arrumada para nao ficar tao perto dos outros -->
+								<form class="form-inline">
+									<button class="btn btn-success" type="button" onclick="addProcesso()">Add</button>
+									<button class="btn btn-danger" type="button" onclick="rmProcesso()">Remove</button>
+									<button class="btn btn-warning" type="button" onclick="listaSugerida()">Use Suggested List</button>
+								</form>
+							</div>
+
+							<div class="col-md-7">
+								<h4 id="titulo_secao2"></h4>
+								<p id="descricao_secao2"></p>				
+							</div>	
+						</div>
+						</div>
+        			</div>
+				</div>
+				
+				<!-- Process List Table -->
+				<div class="panel panel-primary">
+					<!-- Panel Header -->
+					<div class="panel-heading">
+			    		<h4>Process List</h4>
+					</div>
+					<table class="table table-condensed" style="width:100%" id="myTable"></table>
+				</div>
+
+			</div>
+
+			<div class="tab-pane" id="tab_parameters">
+				<div class="panel panel-primary">
+					<!-- Panel Header -->
+					<div class="panel-heading">
+				        <h4>3 - Global parameters for simulation (optional)</h4>
+					</div>
+
+					<!-- Panel Body -->
+					<div class="panel-body">
+						<div class="row">
+						<div class="row-eq-height">
+							<div class="col-md-5">
+								<h4> <p>Quantum</p> </h4>
+								<input class="form-control" type="text" id="quantum" placeholder="quantum ???" onfocus="terceiraSecaoSelecionada(this);">
+				
+								<h4> <p>Switch Cost</p> </h4>
+								<input class="form-control" type="text" id="switch" placeholder="switch cost ???" onfocus="terceiraSecaoSelecionada(this);">
+				
+								<h4> <p>Time of one I/O operation</p> </h4>
+								<input class="form-control" type="text" id="io_time" placeholder="io time ???" onfocus="terceiraSecaoSelecionada(this);">
+	
+								<h4> <p>Average processing time until I/O</p> </h4>
+								<input class="form-control" type="text" id="until_io" placeholder="quantum ???" onfocus="terceiraSecaoSelecionada(this);">
+							</div>	
+				
+							<div class="col-md-7">
+								<h4 id="titulo_secao3"></h4>
+								<p id="descricao_secao3"></p>				
+							</div>
+						</div>
+						</div>	
+					</div>
+				</div>
+			</div>
+
+			<div class="tab-pane" id="tab_simulation">
+				<div class="panel panel-primary">
+					<!-- Panel Header -->
+					<div class="panel-heading">
+				        <h4>4 - Simulation</h4>
+					</div>
+
+					<!-- Panel Body -->
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+			                	<p>Click on the button below to start the simulation. If more than one scheduling algorithm has processes then a comparison will be made.</p>			                	
+			                	<p id="simulation_warning" style="display:none">Currently, the following algorithms have processes:</p>			                	<ul id="filled_algorithms">
+			                	</ul>
+							</div>
+
+							<!-- Executar Simulacao -->
+							<center>
+								<button type="button" class="btn btn-primary btn-lg" onclick="simular()" style="width:50%">Run simulation</button>
+							</center>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div> <!-- Fim div container -->
+    
+    <p id="lang" hidden="true">en</p>
+    <div class="navbar navbar-default navbar-fixed-bottom navbar-inverse">
+        <p class="navbar-text">&copy; 2018 by Marcelo Koti Kamada, Maria Lydia Fioravanti</p>
+    </div>
+   
+   
+   	<div hidden=true id="titulo_round_robin">Round-robin scheduling</div><div hidden=true id="descricao_round_robin">Round-robin is an algorithm in which the operating system uses a timer, called quantum, where all processes gain the same amount of quantum to rotate in the CPU.</div><div hidden=true id="vantagens_round_robin">Simplicity; easy to implement; generates time slot for each process, making the process queue does not stand still in a single process.</div><div hidden=true id="desvantagens_round_robin">Very large processes can stay a long time running on the CPU, degrading the system; no process finishes running before everyone has run a little.</div><div hidden=true id="valor_round_robin">round_robin</div><div hidden=true id="titulo_queues">Multiple queues</div><div hidden=true id="descricao_queues">Multiple queues is an algorithm in which processes queues are used. Each queue has a certain priority level, and the operating system initially meets the highest priority queues, then only when a queue is emptied the scheduler moves to the next one.</div><div hidden=true id="vantagens_queues">Increased CPU utilization; maximize throughput; minimize turnaround; minimize waiting time; minimize response time; decreased use of resources; prioritize processes that hold key resources; no system degradation.</div><div hidden=true id="desvantagens_queues">Behavior difficult to predict; processes never change queue.</div><div hidden=true id="valor_queues">queues</div><div hidden=true id="titulo_priority">Priority scheduling</div><div hidden=true id="descricao_priority">Priority scheduling is an algorithm in which a priority is assigned to each process, and the executable process with the highest priority is allowed to run. It is implemented by a clock interruption generated at certain time intervals in order to reassess the priorities of the processes in the ready queue.</div><div hidden=true id="vantagens_priority">Differentiation of processes according to their importance; no high-priority process can run for an extended period; I/O-bound processes have higher priority to access the CPU.</div><div hidden=true id="desvantagens_priority">Starvation.</div><div hidden=true id="valor_priority">priority</div><div hidden=true id="titulo_shortest">Shortest process next or Shortest Job First (SJF)</div><div hidden=true id="descricao_shortest">SJF is an algorithm in which the lower processes have priority, that is, the lower process gain CPU and, behind it, a queue of processes is formed in ascending order of execution time.</div><div hidden=true id="vantagens_shortest">Simplicity; maximize process runtime; minimize the average amount of time each process has to wait until the execution is complete.</div><div hidden=true id="desvantagens_shortest">Blocking indefinitely; we can not prioritize the execution of a larger process.</div><div hidden=true id="valor_shortest">shortest</div><div hidden=true id="titulo_lotery">Lottery scheduling</div><div hidden=true id="descricao_lotery">Lottery is an algorithm in which the operating system distributes numbered tokens among processes. A random number is raffled to occur scheduling and the process gain CPU utilization. Therefore, processes that have more tokens are more likely to receive the CPU.</div><div hidden=true id="vantagens_lotery">Highly responsive (concerning the number of tokens distributed); ideal for cooperative processes (tokens donation).</div><div hidden=true id="desvantagens_lotery">Process with the highest priority can get few tokens and take a long time to run.</div><div hidden=true id="valor_lotery">lotery</div><div hidden=true id="titulo_execution_time">Runtime</div><div hidden=true id="descricao_execution_time">CPU time needed by the process to finish</div><div hidden=true id="titulo_process_type">Process type</div><div hidden=true id="descricao_process_type">Type of the process, CPU or I/O bound</div><div hidden=true id="titulo_cpu_bound">CPU-bound</div><div hidden=true id="descricao_cpu_bound">Processes with long periods of processing (CPU burst) between I/O requests. This simulator assumes CPU bound processes with no I/O requests.</div><div hidden=true id="titulo_io_bound">I/O-bound</div><div hidden=true id="descricao_io_bound">Process with short periods of processing between I/O requests. Processes classified as CPU bound can be classified as I/O bound when the processing power of the processor reduces the CPU burst to short intervals of time. This simulator assumes I/O bound process requesting I/O operations every "Average processing time until I/O" periods.</div><div hidden=true id="titulo_lotery_value">Lottery</div><div hidden=true id="descricao_lotery_value">Number of tickets given to a process, processes with more tickets are more likely to win the lottery and execute in the CPU.</div><div hidden=true id="titulo_priority_value">Priority</div><div hidden=true id="descricao_priority_value">Priority of a process, processes with higher priority execute first than others with lower priority. This simulator assumes zero as the highest priority and three as the lowest one.</div><div hidden=true id="titulo_quantum">Quantum</div><div hidden=true id="descricao_quantum">Maximum period of time which the process can execute in the CPU each time it is chosen by the scheduler.</div><div hidden=true id="titulo_switch_cost">Switch Cost</div><div hidden=true id="descricao_switch_cost">Time needed in order to switch the current executing process by the one chosen by the scheduler.</div><div hidden=true id="titulo_io_time">Time of one I/O operation</div><div hidden=true id="descricao_io_time">Time to finish one I/O operation. Processes are blocked until by this amount of time when they request an I/O operation.</div><div hidden=true id="titulo_processing_until_io">Average processing time until I/O</div><div hidden=true id="descricao_processing_until_io">Average processing time until an I/O bound process requests an I/O operations and blocks.</div><div hidden=true id="titulo_simulation_description"></div><div hidden=true id="descricao_simulation_description">Click on the button below to start the simulation. If more than one scheduling algorithm has processes then a comparison will be made.</div><div hidden=true id="titulo_simulation_warning"></div><div hidden=true id="descricao_simulation_warning">Currently, the following algorithms have processes:</div><div hidden=true id="execution_time">Execution time (between 1 and 100)</div><div hidden=true id="optional_field_tickets">Number of tickets (between 1 and 100)</div><div hidden=true id="optional_field_priority">Priority level (between 0 and 3)</div><div hidden=true id="quantum">quantum ???</div><div hidden=true id="switch_cost">switch cost ???</div><div hidden=true id="io_time">io time ???</div><div hidden=true id="processing_until_io">processing until io ???</div><div hidden=true id="execution_time_error">Execution time must be between 1 and 100</div><div hidden=true id="missing_tickets">Number of tickets must be between 1 and 100</div><div hidden=true id="missing_priority">Priority must be between 1 and 3</div><div hidden=true id="no_process">No process to simulate</div><div hidden=true id="name">Name</div><div hidden=true id="type">Type</div><div hidden=true id="time">Time</div><div hidden=true id="tickets">Number of tickets</div><div hidden=true id="priority_header">Priority</div><div hidden=true id="ready_process">Ready processes</div><div hidden=true id="blocked_process">Blocked processes</div><div hidden=true id="remaining_time">Remaining time</div><div hidden=true id="io_remaining_time">I/O Remaining time</div>    
+
+	<!-- Script javascript para as funcoes -->
+	<script type="text/javascript" src="index.js"></script>
+
+</body>
+
+</html>
+

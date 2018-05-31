@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<title>Thesis</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="Aux/w3/w3.css"> <!--relative path dosn't work -->
+<link rel="stylesheet" href="Aux/w3/w3-theme-black.css">
+<link rel="stylesheet" href="Aux/w3/Roboto.css">
+<link rel="stylesheet" href="Aux/w3/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 43px;
+  bottom: 0;
+  height: inherit;
+}
+</style>
+<!-- This style is for changing colors of links according to visit 
+<style>  
+a:link {
+    color: green;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:visited {
+    color: pink;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:hover {
+    color: red;
+    background-color: transparent;
+    text-decoration: underline;
+}
+a:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: underline;
+}
+</style>
+-->
+
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()">
+    <i class="fa fa-bars"></i> </a>   
+    <a href="index.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">HOME</a>
+    <a href="theory.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">THEORY</a>
+    <a href="/cgi-bin/simulator.py" class="w3-bar-item w3-button w3-hide-small w3-hover-white">SIMULATOR</a>
+    <a href="pi.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">RASPBERRY PI</a>
+  </div>
+</div>
+
+
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+  <div class="w3-padding-64">
+    <div class="w3-container">
+      <h1 class="w3-text-teal" id="H3" >Simulator Page </h1>
+      <p> Select a Scheduling Algorithm</p>
+      <form action="">
+	 <input type="radio" checked="checked" value="RMS" name="algo"> RMS <br>
+	 <input type="radio" value="EDF" name="algo"> EDF <br>
+	 <input type="radio" value="LLF" name="algo"> LLF  <br>
+ 	 <input type="radio" value="RR" name="algo"> RR <br>
+ 	 <input type="radio" value="PRR" name="algo"> PRR <br>
+ 	 <input type="radio" value="FCFS" name="algo"> FCFS <br>	 
+ 	 <input type="radio" value="SPN" name="algo"> SPN <br>
+	 <input type="radio" value="SRT" name="algo"> SRT <br>	
+	 <input type="radio" value="HRRN" name="algo"> HRRN <br>
+	 <input type="radio" value="MLFQ" name="algo"> MLFQ <br>	
+	</form>
+     <p> <button class="w3-button w3-black w3-hover-green">Select</button> <p>
+    </div>
+
+  </div>
+
+  <!-- Pagination -->
+  <div class="w3-center w3-padding-32">
+    <div class="w3-bar">
+      <a class="w3-button w3-black" href="#">1</a>
+      <a class="w3-button w3-hover-black" href="#">2</a>
+      <a class="w3-button w3-hover-black" href="#">3</a>
+      <a class="w3-button w3-hover-black" href="#">4</a>
+      <a class="w3-button w3-hover-black" href="#">5</a>
+      <a class="w3-button w3-hover-black" href="#">»</a>
+    </div>
+  </div>
+
+  <footer id="myFooter">
+    <div class=" w3-bottombar w3-container w3-theme-l2 w3-padding-small">
+      <h4>Footer</h4>
+    </div>
+  </footer>
+
+<!-- END MAIN -->
+</div>
+
+
+
+</body>
+</html>
+

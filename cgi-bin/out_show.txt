@@ -1,0 +1,62 @@
+Content-type:text/html
+
+Name	Arrival	BT	START	USE	PRI	END	STATUS 
+T1	0	10	0	1	24	10	 
+T1	0	10	0	1	25	10	 
+T1	0	10	0	1	26	10	 
+T1	0	10	0	1	27	10	 
+T2	4	3	4	1	22	7	 
+T3	5	10	5	1	15	15	 
+T3	5	10	5	1	16	15	 
+T3	5	10	5	1	17	15	 
+T3	5	10	5	1	18	15	 
+T3	5	10	5	1	19	15	 
+T3	5	10	5	1	20	15	 
+T3	5	10	5	1	21	15	 
+T3	5	10	5	1	22	15	 
+T2	4	3	4	1	23	7	 
+T3	5	10	5	1	23	15	 
+T2	4	3	4	1	24	7	Finish
+T3	5	10	5	1	24	15	Finish
+T1	0	10	0	1	28	10	 
+T1	0	10	0	1	29	10	 
+T1	0	10	0	1	30	10	 
+T1	0	10	0	1	31	10	 
+T1	0	10	0	1	32	10	 
+T1	0	10	0	1	33	10	Finish
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+
+Process	  Burst Time	  Waiting Time	  Turn Around Time 
+T1		10		0		10
+T1		10		10		20
+T1		10		20		30
+T2		3		30		33
+T3		10		33		43
+T3		10		43		53
+T3		10		53		63
+T3		10		63		73
+T3		10		73		83
+T3		10		83		93
+T3		10		93		103
+T3		10		103		113
+T2		3		113		116
+T3		10		116		126
+T2		3		126		129
+T3		10		129		139
+T1		10		139		149
+T1		10		149		159
+T1		10		159		169
+T1		10		169		179
+T1		10		179		189
+T1		10		189		199
+Average Waiting time is: 8.97732426317
+Average Turn Arount Time is: 9.45351473924

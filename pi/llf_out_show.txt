@@ -1,0 +1,36 @@
+Content-type:text/html
+
+RunTime	Name	Arrival	BT	Start	USE	PRI	END	STATUS 
+0	T1	0	7	0	1	27	1	 
+1	T2	1	5	1	1	23	2	 
+2	T2	1	5	2	1	24	3	 
+3	T2	1	5	3	1	25	4	 
+4	T5	4	2	4	1	24	5	 
+5	T6	5	1	5	1	24	6	Finish
+6	T3	2	3	6	1	25	7	 
+7	T5	4	2	7	1	25	8	Finish
+8	T2	1	5	8	1	26	9	 
+9	T3	2	3	9	1	26	10	 
+10	T4	3	1	10	1	26	11	Finish
+11	T2	1	5	11	1	27	12	Finish
+12	T3	2	3	12	1	27	13	Finish
+13	T1	0	7	13	1	28	14	 
+14	T1	0	7	14	1	29	15	 
+15	T1	0	7	15	1	30	16	 
+16	T1	0	7	16	1	31	17	 
+17	T1	0	7	17	1	32	18	 
+18	T1	0	7	18	1	33	19	Finish
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 
+No task uses the processor. 

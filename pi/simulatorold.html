@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<title>Thesis</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/Aux/w3/w3.css"> <!--relative path dosn't work -->
+<link rel="stylesheet" href="/Aux/w3/new.css"> <!--relative path dosn't work -->
+<link rel="stylesheet" href="/Aux/w3/w3-theme-black.css">
+<link rel="stylesheet" href="/Aux/w3/Roboto.css">
+<link rel="stylesheet" href="/Aux/w3/font-awesome.min.css">
+<head> 
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()">
+    <i class="fa fa-bars"></i> </a>   
+    <a href="index.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">HOME</a>
+    <a href="theory.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">THEORY</a>
+    <a href="simulator.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">SIMULATOR</a>
+    <a href="pi.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">RASPBERRY PI</a>
+  </div>
+</div>
+
+ <div class="w3-main">
+  <div class="w3-row w3-padding-64">
+    <div class="w3-container w3-quarter">
+      <h2 class="w3-text-teal" id="H3" >Simulator Page </h2>
+      <p> Select a Scheduling Algorithm</p>
+      <form id="algo_post" name="algo_post" action="" method="post" >
+   	  <fieldset>
+  	  <legend>Select an Algorithm</legend>
+	<input type="radio" onclick="myFunction(this.value)" value="RMS"  name="algo" checked> RMS <br>
+	 <input type="radio" onclick="myFunction(this.value)" value="EDF" name="algo"> EDF <br>
+	 <input type="radio" onclick="myFunction(this.value)" value="LLF" name="algo"> LLF  <br>
+ 	 <input type="radio" onclick="myFunction(this.value)" value="RR" name="algo"> RR <br>
+ 	 <input type="radio" onclick="myFunction(this.value)" value="PRR" name="algo"> PRR <br>
+ 	 <input type="radio" onclick="myFunction(this.value)" value="FCFS" name="algo"> FCFS <br>	 
+ 	 <input type="radio" onclick="myFunction(this.value)"  value="SPN" name="algo"> SPN <br>
+	 <input type="radio" onclick="myFunction(this.value)"  value="SRT" name="algo"> SRT <br>	
+	 <input type="radio" onclick="myFunction(this.value)" value="HRRN" name="algo"> HRRN <br>
+	 <input type="radio" onclick="myFunction(this.value)"  value="MLFQ" name="algo"> MLFQ <br>
+	</fieldset>
+	      Selected Algorithm is: <input type="text" id="result" value="RMS">
+          <br> <input type="checkbox" id="t_check"  name="tbl" value="table" checked> Use Default Task Table </br> <br>
+          <button class="w3-button w3-black w3-hover-green" onclick="taskcheck()" >Select</button> 
+      </form>
+    </div>
+    <div class="w3-threequarter w3-container">
+	<!--h2 class="w3-text-teal" id="H3" > Algorithm Details </h2-->
+
+        
+ 	<iframe name="Iframe1" input type="text" id="info" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="info/rmsinfo.html">
+                 <p id="demo"></p>
+      	</iframe>
+      	<!img src="/home/ashish/proj/html/img/pi3.png" alt="Raspberry Pi" >
+      	<!--<p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
+      	<p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
+      	-->
+    </div>
+  </div>
+  <footer id="myFooter">
+    <div class=" w3-bottombar w3-container w3-theme-l2 w3-padding-small">
+      <h4>Footer</h4>
+    </div>
+  </footer>
+
+<!-- END MAIN -->
+</div>
+<script>
+function myFunction(sched) {
+    document.getElementById("result").value = sched;
+    var x = document.getElementById("info")
+            switch(sched) {
+    case "RMS":
+        {x.src = "info/rmsinfo.html";}
+        break;
+    case "EDF":
+        {x.src = "info/edfinfo.html";}
+        break;
+    case "LLF":
+        {x.src = "info/llfinfo.html";}
+        break;
+    case "RR":
+        {x.src = "info/rrinfo.html";}
+        break;
+    case "PRR":
+        {x.src = "info/prrinfo.html";}
+        break;
+    case "FCFS":
+        {x.src = "info/fcfsinfo.html";}
+        break;
+    case "SPN":
+        {x.src = "info/spninfo.html";}
+        break;
+    case "SRT":
+        {x.src = "info/srtinfo.html";}
+        break;
+    case "HRRN":
+        {x.src = "info/hrrninfo.html";}
+        break;
+    case "MLFQ":
+        {x.src = "info/mlfqinfo.html";}
+        break;
+    default:
+        {x.src = "";}
+} 
+}
+function taskcheck() {
+var y = document.getElementById("algo_post")
+var z = document.getElementById("t_check").checked
+    if (z)
+     { y.action = "cgi-bin/taskout.py" 
+      alert("Using Default Task Table"); }
+    else 
+    { var cust;
+    if (confirm("Use Custom Task Table ? ")) {
+        y.action = "cgi-bin/taskshow.py" 
+        cust = "Using Custom Task Table";
+    } else {
+        cust = "Using Default Task Table";
+        y.action = "cgi-bin/taskout.py"
+    } }
+}
+</script>
+</body>
+</html>
+

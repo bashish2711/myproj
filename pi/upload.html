@@ -1,0 +1,13 @@
+<html>
+<link rel="stylesheet" href="/Aux/w3/w3.css"> <!--relative path dosn't work -->
+<body>
+   <form enctype = "multipart/form-data" action = "/cgi-bin/download.py" method = "post">
+   <br> <input type = "submit" value = "Download Sample File" />
+   </form>
+   <form enctype = "multipart/form-data" action = "/cgi-bin/file_save.py" method = "post">
+   <br>File: <input type = "file" name = "filename" />
+   <input class="w3-button w3-black w3-hover-green" type = "submit" value = "Upload" />
+   </form>
+   
+</body>
+</html>
