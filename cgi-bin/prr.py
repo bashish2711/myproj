@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#First Come First Serve scheduling implementation
+#Round Robin scheduling implementation
 
 import string
 import random
@@ -17,7 +17,7 @@ import os
 print "Content-type:text/html\r\n\r\n"
 form = cgi.FieldStorage()  #trying cgi method , instantiation
 infile = form.getvalue('in')
-#infile ='deftask1'
+infile ='deftask2'
 outfile = infile + '.html'
 print """
 <html>
@@ -41,12 +41,12 @@ print """
    <title> Sucess </title>
    <body>
    <h2> The code Executed Successfully </h2>
-   <a href=/fcfs_html_show.html target=_new> HTML Gantt Chart </a>
-   <a href=/fcfs_out_show.txt target=_new> Text Log File </a>
+   <a href=/rr_html_show.html target=_new> HTML Gantt Chart </a>
+   <a href=/rr_out_show.txt target=_new> Text Log File </a>
    <p> Gantt Chart </p>
-   <iframe name="Iframe2" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight+20 +'px';" src="/fcfs_html_show.html" > </iframe>
+   <iframe name="Iframe2" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight+20 +'px';" src="/rr_html_show.html" > </iframe>
    <p> Run Log </p>
-   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=fcfs_out_show.txt&out=fcfs_out_show.html"> </iframe> 
+   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=rr_out_show.txt&out=rr_out_show.html"> </iframe> 
    
    </body>
 </html>
@@ -60,7 +60,7 @@ err += "<br> <b> Error Log: </b> \n"
 class TaskIns(object):
 
      #Constructor (should only be invoked with keyword parameters)
-    def __init__(self, at, start, end, priority, name, bt):
+    def __init__(self, at, start, end, priority, name, bt, tq):
         self.at    = at
         self.end      = end
         self.usage    = 0
@@ -71,16 +71,25 @@ class TaskIns(object):
         self.run_time = 0
         self.start = start
         self.finish = 0
+        self.tq = tq  #time quantum
     def name_cmp(self, other):
     	if self.name == other.name:
        	 return 1
        	else:
        		return -1
     	return 0
+    	
+   
+	#Check Time Quantum
+	def tq_Check(self):
+	    if self.tq < self.usage:
+	    	print "task must be resheduled"
+	    	return True
+		
 
     #Allow an instance to use the cpu (periodic)
     def use(self, usage):
-        global out, run_time
+        global out, run_time, ready_list
         self.run_time = run_time+clock_step-1
         self.usage += usage
         self.start = self.run_time
@@ -88,19 +97,26 @@ class TaskIns(object):
         if self.usage >= self.bt:
             self.status = "Finish"
         else:
-            self.status = " "
+        	if self.tq <= self.usage:
+        		self.status = "requeue"
+        	else:
+        		self.status = " "
+            
         out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status) + "\n"
-        
+        if self.tq <= self.usage:
+        	self.status = "requeue"
+        	return True
         self.wt(self.status)
         if self.usage >= self.end - self.at:
-            return True
-            self.start=0
-        return False
-        self.start=0
+        		return True
+        		self.start=0
+        if self.usage <= self.tq:
+        	return False
+        	self.start=0
         
     def wt(self, status):
             if self.status=="Finish":
-        	print "%s arrived at %s started at %s last started at  %s and finished at %s \n" %(self.name, self.at, self.start, self.start, self.finish) 
+        	print "%s arrived at %s started at %s last started at  %s and finished at %s <br>" %(self.name, self.at, self.start, self.start, self.finish) 
     
     #Default representation
     #def __repr__(self):
@@ -131,20 +147,21 @@ def priority_cmp(one, other):
 
 #Deadline monotonic comparison
 def tasktype_cmp(self, other):
-    if self.deadline < other.deadline:
+    if self.arrival_time < other.arrival_time:
         return -1
-    if self.deadline > other.deadline:
+    if self.arrival_time > other.arrival_time:
         return 1
     return 0
 
 if __name__ == '__main__':
     #Variables
     html_color = { 'T1':'red', 'T2':'blue', 'T3':'green', 'T4':'aqua', 'T5':'coral', 'T6':'red', 'T7':'blue', 'T8':'green', 'T9':'aqua', 'T10':'coral', 'Ideal':'grey', 'Finish':'black'}
-    taskfile = open(infile)
+    taskfile = open('../pi/tasks.txt')
     lines = taskfile.readlines()
     task_types = []
     tasks = []
     hyperperiod = []
+    time_quantum = 4 #taken fixed value
     done_list = []
 
     #Allocate task types
@@ -166,17 +183,17 @@ if __name__ == '__main__':
     hyperperiod = lcm(hyperperiod)
 
     #Sort types rate monotonic
-    task_types = sorted(task_types, tasktype_cmp)
+    #task_types = sorted(task_types, tasktype_cmp)
 
 
     #Create task instances 
     for i in xrange(0, hyperperiod):
         for task_type in task_types:
-            if  (i - task_type.arrival_time) % task_type.period == 0 and i >= task_type.arrival_time:
+            if  (i - task_type.arrival_time) % task_type.period == 0 and i >= task_type.arrival_time or i > time_quantum + 1:
                 start = i
                 end = start + task_type.burst_time
-                priority = start + task_type.deadline
-                tasks.append(TaskIns(at=task_type.arrival_time, start=start, end=end, priority=priority, name=task_type.name, bt=task_type.burst_time))
+                priority = start
+                tasks.append(TaskIns(at=task_type.arrival_time, start=start, end=end, priority=priority, name=task_type.name, bt=task_type.burst_time, tq=time_quantum))
 
     #Html output at
     html = "Content-type:text/html\r\n\r\n"
@@ -193,7 +210,7 @@ if __name__ == '__main__':
 
 	th, td {
     text-align: left;
-    padding: 9px;
+    padding: 8px;
 		}
 
 	tr:nth-child(even){background-color: #f2f2f2}
@@ -208,7 +225,9 @@ if __name__ == '__main__':
     for task_type in task_types:
         utilization += float(task_type.burst_time) / float(task_type.period)
     if utilization > 1:
-        err += 'Utilization error! \n'
+        err += '<b> Utilization error! </b> \n'
+        html += '<br /><br />Utilization error!<br /><br />'
+
     #Simulate clock
     clock_step = 1
     run_time = 0
@@ -218,7 +237,7 @@ if __name__ == '__main__':
         for t in tasks:
             if t.at <= i:
                 ready_list.append(t)
-        ready_list = sorted(ready_list, priority_cmp)
+        #ready_list = sorted(ready_list, priority_cmp)
 
         #Select task with highest priority
         # Print Tasks
@@ -226,9 +245,10 @@ if __name__ == '__main__':
             on_cpu = ready_list[0]
             done_list.append(on_cpu)
             html += '<td style="background-color:' + html_color[on_cpu.name] + ';">' + on_cpu.name + '</td>' + '\n'
-            #on_cpu.priority += clock_step
+           # on_cpu.priority += clock_step
             if on_cpu.use(clock_step):
-                tasks.remove(on_cpu)
+            	tasks.remove(on_cpu)
+            	ready_list.append(on_cpu) # Add task to queue again
                 run_time += clock_step
                 #out += "\n"
                 # Not Print Finish as it is showing on Gantt chart
@@ -239,17 +259,19 @@ if __name__ == '__main__':
             	run_time += clock_step
             	
         else:
-            err += '<p>' + str(run_time) + '  No task uses the processor. </p> \n'
+            err += '<p> Run Time: ' + str(run_time) + '\t No task uses the processor. </p>'
             # Processor is not used but runtime is going
             run_time += clock_step
-            html += '<td style="background-color:' + html_color['Ideal'] + ';">I</td> \n'
+            html += '<td style="background-color:' + html_color['Ideal'] + ';">I</td>'  + '\n'
         #out += "\n"
             
 
     #out += remaining periodic tasks
     html += "<br /><br />"
-    for p in tasks:
-        err += "<p> " + p.get_unique_name() + " is dropped due to overload! </p>"
+    #for p in tasks:
+        #out += p.get_unique_name() + " is dropped due to overload!" + "\n"
+        #html += "<p>" + p.get_unique_name() + " is dropped due to overload!</p>"
+    
     #Table done, print period below table
     html += "</tr>"
     # at New row to print runtime
@@ -260,10 +282,10 @@ if __name__ == '__main__':
     #Html output end
     html += "</body></html>"
     print err
-    out_show = open('../pi/fcfs_out_show.txt', 'w')
+    out_show = open('../pi/rr_out_show.txt', 'w')
     out_show.write(out)
     out_show.close()
-    html_show = open('../pi/fcfs_html_show.html', 'w')
+    html_show = open('../pi/rr_html_show.html', 'w')
     html_show.write(html)
     html_show.close()
 

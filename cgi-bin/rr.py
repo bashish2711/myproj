@@ -15,6 +15,10 @@ def lcm(a):
 import cgi, cgitb
 import os
 print "Content-type:text/html\r\n\r\n"
+form = cgi.FieldStorage()  #trying cgi method , instantiation
+infile = form.getvalue('in')
+#infile ='deftask2'
+outfile = infile + '.html'
 print """
 <html>
    <head> </head>
@@ -42,7 +46,7 @@ print """
    <p> Gantt Chart </p>
    <iframe name="Iframe2" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight+20 +'px';" src="/rr_html_show.html" > </iframe>
    <p> Run Log </p>
-   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/rr_out_show.txt"> </iframe> 
+   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=rr_out_show.txt&out=rr_out_show.html"> </iframe> 
    
    </body>
 </html>
@@ -50,7 +54,8 @@ print """
 
 out = "Content-type:text/html\r\n\r\n"
 out += "RunTime\tName\tArrival\tBT\tStart\tUSE\tPRI\tEND\tSTATUS \n"
-
+err = "Content-type:text/html\r\n\r\n"
+err += "<br> <b> Error Log: </b> \n"
 #A task instance
 class TaskIns(object):
 
@@ -97,7 +102,7 @@ class TaskIns(object):
         	else:
         		self.status = " "
             
-        out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status)
+        out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status) + "\n"
         if self.tq <= self.usage:
         	self.status = "requeue"
         	return True
@@ -220,7 +225,7 @@ if __name__ == '__main__':
     for task_type in task_types:
         utilization += float(task_type.burst_time) / float(task_type.period)
     if utilization > 1:
-        out += 'Utilization error!'
+        err += '<b> Utilization error! </b> \n'
         html += '<br /><br />Utilization error!<br /><br />'
 
     #Simulate clock
@@ -254,11 +259,11 @@ if __name__ == '__main__':
             	run_time += clock_step
             	
         else:
-            out += str(run_time) + '\t No task uses the processor. '
+            err += '<p> Run Time: ' + str(run_time) + '\t No task uses the processor. </p>'
             # Processor is not used but runtime is going
             run_time += clock_step
             html += '<td style="background-color:' + html_color['Ideal'] + ';">I</td>'  + '\n'
-        out += "\n"
+        #out += "\n"
             
 
     #out += remaining periodic tasks
@@ -276,10 +281,12 @@ if __name__ == '__main__':
        
     #Html output end
     html += "</body></html>"
-    html_show = open('../pi/rr_html_show.html', 'w')
-    html_show.write(html)
-    html_show.close()
+    print err
     out_show = open('../pi/rr_out_show.txt', 'w')
     out_show.write(out)
     out_show.close()
+    html_show = open('../pi/rr_html_show.html', 'w')
+    html_show.write(html)
+    html_show.close()
+
 

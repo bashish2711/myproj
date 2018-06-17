@@ -4,7 +4,9 @@ import string
 import random
 print 'Content-type:text/html\r\n\r\n'
 form = cgi.FieldStorage()  #trying cgi method
+sel = 'RMS'
 sel = form.getvalue('which_algo')
+task = form.getvalue('which_table')
 algo =  {'RMS':'rm.py', 'EDF':'edf.py', 'LLF':'llf.py', 'RR':'rr.py', 'PRR':'prr.py', 'FCFS':'fcfs.py',
 'SPN':'spn.py', 'SRT':'srt.py', 'HRRN':'hrrn.py', 'MLFQ':'mlfq.py'}
 var = algo.keys()
@@ -31,8 +33,8 @@ html = """
 </head>
 <body>
 
-        <iframe name="Iframe1" input type="text" id="info" frameborder="0" scrolling="no" width=100%% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src=%s>
+        <iframe name="Iframe1" input type="text" id="info" frameborder="0" scrolling="no" width=100%% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src=%s?in=%s>
                  <p id="demo"></p>
         </iframe>
-""" %(code)
+""" %(code, task)
 print html

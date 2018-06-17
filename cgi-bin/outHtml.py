@@ -3,7 +3,7 @@ import cgi, cgitb
 import string
 import random
 ##########################################
-## This is CGI Script and is called as "http://localhost/cgi-bin/txtHtml.py?in=default1&out=default1out"
+## This is CGI Script and is called as "http://localhost/cgi-bin/outHtml.py?in=infile&out=outfile"
 ## were default1 is input txt file name and default1out is output html file name
 ##########################################
 print 'Content-type:text/html\r\n\r\n'
@@ -11,17 +11,22 @@ form = cgi.FieldStorage()  #trying cgi method , instantiation
 infile = form.getvalue('in')
 outfile = form.getvalue('out')
 algoposted = form.getvalue('algo_post')
-infile="../pi/edf_out_show.txt"
-outfile="../pi/edf_out_show.html"
-if (infile):
-	print "infile is :" , infile
-else:
-	print "Please provide in file"
-if (outfile):
-	print "outfile is :" , outfile
-else:
-	print "Please provide out file"
-print algoposted
+#print infile, outfile
+#infile="fcfs_out_show.txt"
+#outfile="fcfs_out_show.html"
+#print infile
+infile="../pi/" + infile
+outfile="../pi/" + outfile
+#print infile, outfile
+#if (infile):
+#	print "infile is :" , infile
+#else:
+#	print "Please provide in file"
+#if (outfile):
+#	print "outfile is :" , outfile
+#else:
+#	print "Please provide out file"
+#print algoposted
 #if (outfile):
 #    outFile = open(outfile)
 #else:

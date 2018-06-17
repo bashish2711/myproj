@@ -15,6 +15,10 @@ def lcm(a):
 import cgi, cgitb
 import os
 print "Content-type:text/html\r\n\r\n"
+form = cgi.FieldStorage()  #trying cgi method , instantiation
+infile = form.getvalue('in')
+infile ='deftask1'
+outfile = infile + '.html'
 print """
 <html>
    <head> </head>
@@ -42,7 +46,7 @@ print """
    <p> Gantt Chart </p>
    <iframe name="Iframe2" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight+20 +'px';" src="/dm_html_show.html" > </iframe>
    <p> Run Log </p>
-   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/dm_out_show.txt"> </iframe> 
+   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=dm_out_show.txt&out=dm_out_show.html"> </iframe> 
    
    </body>
 </html>
@@ -50,7 +54,8 @@ print """
 
 out = "Content-type:text/html\r\n\r\n"
 out += "RunTime\tName\tArrival\tBT\tStart\tUSE\tPRI\tEND\tSTATUS \n"
-
+err = "Content-type:text/html\r\n\r\n"
+err += "<br> <b> Error Log: </b> \n"
 #A task instance
 class TaskIns(object):
 
@@ -84,7 +89,7 @@ class TaskIns(object):
             self.status = "Finish"
         else:
             self.status = " "
-        out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status) 
+        out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status)  + "\n"
         
         self.wt(self.status)
         if self.usage >= self.end - self.at:
@@ -135,7 +140,7 @@ def tasktype_cmp(self, other):
 if __name__ == '__main__':
     #Variables
     html_color = { 'T1':'red', 'T2':'blue', 'T3':'green', 'T4':'aqua', 'T5':'coral', 'T6':'red', 'T7':'blue', 'T8':'green', 'T9':'aqua', 'T10':'coral', 'Ideal':'grey', 'Finish':'black'}
-    taskfile = open('../pi/tasks.txt')
+    taskfile = open(infile)
     lines = taskfile.readlines()
     task_types = []
     tasks = []
@@ -176,7 +181,7 @@ if __name__ == '__main__':
     #Html output at
     html = "Content-type:text/html\r\n\r\n"
     html = """
-    <!DOCTYPE html><html><head><title>LLF Scheduling</title></head><body>
+    <!DOCTYPE html><html><head><title>DM Scheduling</title></head><body>
            <meta name="viewport" content="width=device-width, initial-scale=1">
 	<style>
 	table {
@@ -203,8 +208,7 @@ if __name__ == '__main__':
     for task_type in task_types:
         utilization += float(task_type.burst_time) / float(task_type.period)
     if utilization > 1:
-        out += 'Utilization error!'
-        html += '<br /><br />Utilization error!<br /><br />'
+        err += '<br> Utilization error! <br>'
 
     #Simulate clock
     clock_step = 1
@@ -236,18 +240,17 @@ if __name__ == '__main__':
             	run_time += clock_step
             	
         else:
-            out += 'No task uses the processor. '
+            err += '<p> Run Time: ' + str(run_time) + '\t No task uses the processor. </p>'
             # Processor is not used but runtime is going
             run_time += clock_step
             html += '<td style="background-color:' + html_color['Ideal'] + ';">I</td>'  + '\n'
-        out += "\n"
+        #out += "\n"
             
 
     #out += remaining periodic tasks
     html += "<br /><br />"
     for p in tasks:
-        out += p.get_unique_name() + " is dropped due to overload!"
-        html += "<p>" + p.get_unique_name() + " is dropped due to overload!</p>"
+         err += "<p> " + p.get_unique_name() + " is dropped due to overload! </p>"
     
     #Table done, print period below table
     html += "</tr>"
@@ -258,10 +261,12 @@ if __name__ == '__main__':
        
     #Html output end
     html += "</body></html>"
-    html_show = open('../pi/dm_html_show.html', 'w')
-    html_show.write(html)
-    html_show.close()
+    print err
     out_show = open('../pi/dm_out_show.txt', 'w')
     out_show.write(out)
     out_show.close()
+    html_show = open('../pi/dm_html_show.html', 'w')
+    html_show.write(html)
+    html_show.close()
+
 
