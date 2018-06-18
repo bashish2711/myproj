@@ -1,8 +1,8 @@
 #(Arrival time, Burst time, Period, Deadline, Name) 
 #(Spaced by tab '\t' )
 AT 	BT 	P 	D 	Name
-0	10	33	33	T1
-0	3	33	28	T2
-0	10	33	29	T3
-0	3	33	28	T2
-0	10	33	29	T3
+0	3	30	40	T1
+2	6	30	45	T2
+4	4	15	40	T3
+6	5	30	37	T4
+8	2	15	45	T5

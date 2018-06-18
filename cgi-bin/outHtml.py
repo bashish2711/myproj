@@ -44,7 +44,7 @@ html = """
 table {
     border-collapse: collapse;
     border-spacing: 0;
-    width: 80%;
+    width: 100%;
     border: 1px solid #ddd;
 }
 

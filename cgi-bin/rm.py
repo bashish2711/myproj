@@ -17,7 +17,7 @@ import os
 print "Content-type:text/html\r\n\r\n"
 form = cgi.FieldStorage()  #trying cgi method , instantiation
 infile = form.getvalue('in')
-#infile ='deftask2'
+infile ='deftask1'
 outfile = infile + '.html'
 print """
 <html>
@@ -91,8 +91,11 @@ class TaskIns(object):
         else:
             self.status = " "
         out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status) + "\n"
+        if self.status == "Finish":
+        	self.wt(self.status)
+        	return 1
         
-        self.wt(self.status)
+        
         if self.usage >= self.end - self.at:
             return True
             self.start=0
@@ -101,7 +104,7 @@ class TaskIns(object):
         
     def wt(self, status):
             if self.status=="Finish":
-        	print "%s arrived at %s started at %s last started at  %s and finished at %s" %(self.name, self.at, self.start, self.start, self.finish) 
+        	print (" <p>" + self.name + "\t"+ str(self.at) + "\t"+  str(self.start) +  "\t"+  str(self.start) + "\t"+  str(self.finish) + "</p> \n ")
     
     #Default representation
     #def __repr__(self):
@@ -208,6 +211,7 @@ if __name__ == '__main__':
     utilization = 0
     for task_type in task_types:
         utilization += float(task_type.burst_time) / float(task_type.period)
+    html += "<b> Utilization: " + str(utilization) + "</b>"
     if utilization > 1:
         err += '<b> Utilization error! </b> \n'
         html += '<br /><br />Utilization error!<br /><br />'
@@ -252,7 +256,7 @@ if __name__ == '__main__':
     #out += remaining periodic tasks
     html += "<br /><br />"
     for p in tasks:
-        err += "<p> " + p.get_unique_name() + " is dropped due to overload! </p>"
+        err += "<p> " + p.get_unique_name() + " is dropped due to overload! </p>\n"
     
     #Table done, print period below table
     html += "</tr>"

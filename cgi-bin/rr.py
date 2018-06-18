@@ -46,8 +46,8 @@ print """
    <p> Gantt Chart </p>
    <iframe name="Iframe2" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight+20 +'px';" src="/rr_html_show.html" > </iframe>
    <p> Run Log </p>
-   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=rr_out_show.txt&out=rr_out_show.html"> </iframe> 
-   
+   <iframe name="Iframe1" frameborder="0" scrolling="no" width=70% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=rr_out_show.txt&out=rr_out_show.html"> </iframe> 
+   <br>
    </body>
 </html>
 """
@@ -72,14 +72,7 @@ class TaskIns(object):
         self.start = start
         self.finish = 0
         self.tq = tq  #time quantum
-    def name_cmp(self, other):
-    	if self.name == other.name:
-       	 return 1
-       	else:
-       		return -1
-    	return 0
-    	
-   
+        self.remain_bt = 0
 	#Check Time Quantum
 	def tq_Check(self):
 	    if self.tq < self.usage:
@@ -90,12 +83,14 @@ class TaskIns(object):
     #Allow an instance to use the cpu (periodic)
     def use(self, usage):
         global out, run_time, ready_list
+        self.remain_bt = self.tq-self.usage
         self.run_time = run_time+clock_step-1
         self.usage += usage
         self.start = self.run_time
         self.finish = self.start + clock_step
-        if self.usage >= self.bt:
+        if self.remain_bt <= 0:
             self.status = "Finish"
+            return True
         else:
         	if self.tq <= self.usage:
         		self.status = "requeue"
@@ -116,7 +111,7 @@ class TaskIns(object):
         
     def wt(self, status):
             if self.status=="Finish":
-        	print "%s arrived at %s started at %s last started at  %s and finished at %s <br>" %(self.name, self.at, self.start, self.start, self.finish) 
+        	print (" <p>" + self.name + "\t"+ str(self.at) + "\t"+  str(self.start) +  "\t"+  str(self.start) + "\t"+  str(self.finish) + "</p> \n ") 
     
     #Default representation
     #def __repr__(self):

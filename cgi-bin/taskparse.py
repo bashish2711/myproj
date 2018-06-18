@@ -34,7 +34,6 @@ html = """
 <body>
 
         <iframe name="Iframe1" input type="text" id="info" frameborder="0" scrolling="no" width=100%% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src=%s?in=%s>
-                 <p id="demo"></p>
         </iframe>
 """ %(code, task)
 print html

@@ -3,7 +3,7 @@ import cgi, cgitb
 import string
 import random
 ##########################################
-## This is CGI Script and is called as "http://localhost/cgi-bin/txtHtml.py?in=default1&out=default1out"
+## This is CGI Script and is called as "http://localhost/cgi-bin/outHtml.py?in=infile&out=outfile"
 ## were default1 is input txt file name and default1out is output html file name
 ##########################################
 print 'Content-type:text/html\r\n\r\n'
@@ -11,15 +11,22 @@ form = cgi.FieldStorage()  #trying cgi method , instantiation
 infile = form.getvalue('in')
 outfile = form.getvalue('out')
 algoposted = form.getvalue('algo_post')
-if (infile):
-	print "infile is :" , infile
-else:
-	print "Please provide in file"
-if (outfile):
-	print "outfile is :" , outfile
-else:
-	print "Please provide out file"
-print algoposted
+#print infile, outfile
+#infile="fcfs_out_show.txt"
+#outfile="fcfs_out_show.html"
+#print infile
+infile="../pi/" + infile
+outfile="../pi/" + outfile
+#print infile, outfile
+#if (infile):
+#	print "infile is :" , infile
+#else:
+#	print "Please provide in file"
+#if (outfile):
+#	print "outfile is :" , outfile
+#else:
+#	print "Please provide out file"
+#print algoposted
 #if (outfile):
 #    outFile = open(outfile)
 #else:
@@ -53,20 +60,14 @@ tr:nth-child(even){background-color: #f2f2f2}
 
     #Allocate task types
 html += "<center> <table><h2>" 
-for header in "Name", "A.T.", "B.T", "Period", "Deadline":
+for header in "Name","Arrival", "BT", "END", "Response Time", "Waiting Time", "Turn Around Time":
 	html += "<th> %s </th>" %header
 	
 html += "<tr>"
 for line in lines[3:]:  # three lines are excluded for comments
     line = line.split('\t') 
-    if len(line) == 5:
-    	html += "<td> %s </td>" %line[4]
-    elif len(line) == 4:
-    	name = 'Task'
-    	html += "<td> %s </td>" %name
-    	  
-    for i in range (0,4):
-        line[i] = int(line[i])
+    for i in range (0,7):
+        line[i] = str(line[i])
         html += "<td> %s </td>" %line[i]
 
     html += "</tr>"
