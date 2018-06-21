@@ -47,6 +47,9 @@ print """
    <iframe name="Iframe2" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight+20 +'px';" src="/llf_html_show.html" > </iframe>
    <p> Run Log </p>
    <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=llf_out_show.txt&out=llf_out_show.html"> </iframe> 
+   <h3> Scheduling Parameters: </h3>
+   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/wtHtml.py?in=llf_wt&out=llf_wt.html"> </iframe>
+   
    
    </body>
 </html>
@@ -56,6 +59,8 @@ out = "Content-type:text/html\r\n\r\n"
 out += "RunTime\tName\tArrival\tBT\tStart\tUSE\tPRI\tEND\tSTATUS \n"
 err = "Content-type:text/html\r\n\r\n"
 err += "<br> <b> Error Log: </b> \n"
+param = "Content-type:text/html\r\n\r\n"
+param += "Name\tArrival\tBT\tStart\tEND\tFinish\tResponse Time\tWaiting Time\tTurn Around Time \n"
 #A task instance
 class TaskIns(object):
 
@@ -80,7 +85,7 @@ class TaskIns(object):
 
     #Allow an instance to use the cpu (periodic)
     def use(self, usage):
-        global out, run_time
+        global out, run_time, param
         self.run_time = run_time+clock_step-1
         self.usage += usage
         self.start = self.run_time
@@ -91,7 +96,7 @@ class TaskIns(object):
             self.status = " "
         out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status) + "\n"
         if self.status == "Finish":
-        	self.wt(self.status)
+        	param += (self.name + "\t"+ str(self.at)+"\t"+  str(self.bt) +  "\t"+  str(self.finish) +  "\t"+  str(self.rt) + "\t"+  str(self.wt)+ "\t"+ str(self.tat)+"\t" +"\n")
         	return 1
         
         
@@ -265,6 +270,9 @@ if __name__ == '__main__':
     #Html output end
     html += "</body></html>"
     print err
+    wt_show = open('../pi/llf_wt', 'w')
+    wt_show.write(param)
+    wt_show.close()
     out_show = open('../pi/llf_out_show.txt', 'w')
     out_show.write(out)
     out_show.close()

@@ -17,7 +17,7 @@ import os
 print "Content-type:text/html\r\n\r\n"
 form = cgi.FieldStorage()  #trying cgi method , instantiation
 infile = form.getvalue('in')
-#infile ='deftask1'
+infile ='deftask1'
 outfile = infile + '.html'
 print """
 <html>
@@ -47,7 +47,8 @@ print """
    <iframe name="Iframe2" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight+20 +'px';" src="/hrrn_html_show.html" > </iframe>
    <p> Run Log </p>
    <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=hrrn_out_show.txt&out=hrrn_out_show.html"> </iframe> 
-   
+   <h3> Scheduling Parameters: </h3>
+   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/wtHtml.py?in=edf_wt&out=edf_wt.html"> </iframe  
    </body>
 </html>
 """
@@ -56,6 +57,8 @@ out = "Content-type:text/html\r\n\r\n"
 out += "RunTime\tName\tArrival\tBT\tStart\tUSE\tPRI\tEND\tSTATUS \n"
 err = "Content-type:text/html\r\n\r\n"
 err += "<br> <b> Error Log: </b> \n"
+param = "Content-type:text/html\r\n\r\n"
+param += "Name\tArrival\tBT\tStart\tEND\tFinish\tResponse Time\tWaiting Time\tTurn Around Time \n"
 #A task instance
 class TaskIns(object):
 
@@ -71,6 +74,9 @@ class TaskIns(object):
         self.run_time = 0
         self.start = start
         self.finish = 0
+        self.wt = 0
+        self.tat = 0
+        self.rt = 0
     def name_cmp(self, other):
     	if self.name == other.name:
        	 return 1
@@ -80,7 +86,7 @@ class TaskIns(object):
 
     #Allow an instance to use the cpu (periodic)
     def use(self, usage):
-        global out, run_time
+        global out, run_time, param 
         self.run_time = run_time+clock_step-1
         self.usage += usage
         self.start = self.run_time
@@ -90,8 +96,9 @@ class TaskIns(object):
         else:
             self.status = " "
         out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status) + "\n"
-        
-        self.wt(self.status)
+        if self.status == "Finish":
+            param += (self.name + "\t"+ str(self.at)+"\t"+  str(self.bt) +  "\t"+  str(self.finish) +  "\t"+  str(self.rt) + "\t"+  str(self.wt)+ "\t"+ str(self.tat)+"\t" +"\n")
+            return 1
         if self.usage >= self.end - self.at:
             return True
             self.start=0
@@ -208,6 +215,7 @@ if __name__ == '__main__':
     utilization = 0
     for task_type in task_types:
         utilization += float(task_type.burst_time) / float(task_type.period)
+    html += "<b> Utilization: " + str(utilization) + "</b>"
     if utilization > 1:
         err += 'Utilization error! \n'
 
@@ -263,6 +271,9 @@ if __name__ == '__main__':
     #Html output end
     html += "</body></html>"
     print err
+    wt_show = open('../pi/hrrn_wt', 'w')
+    wt_show.write(param)
+    wt_show.close()
     out_show = open('../pi/hrrn_out_show.txt', 'w')
     out_show.write(out)
     out_show.close()

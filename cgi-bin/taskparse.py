@@ -7,7 +7,7 @@ form = cgi.FieldStorage()  #trying cgi method
 sel = 'RMS'
 sel = form.getvalue('which_algo')
 task = form.getvalue('which_table')
-algo =  {'RMS':'rm.py', 'EDF':'edf.py', 'LLF':'llf.py', 'RR':'rr.py', 'PRR':'prr.py', 'FCFS':'fcfs.py',
+algo =  {'RMS':'rm.py', 'DM':'dm.py', 'EDF':'edf.py', 'LLF':'llf.py', 'RR':'rr.py', 'PRR':'prr.py', 'FCFS':'fcfs.py',
 'SPN':'spn.py', 'SRT':'srt.py', 'HRRN':'hrrn.py', 'MLFQ':'mlfq.py'}
 var = algo.keys()
 for k in var:

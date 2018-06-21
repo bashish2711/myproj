@@ -17,7 +17,7 @@ import os
 print "Content-type:text/html\r\n\r\n"
 form = cgi.FieldStorage()  #trying cgi method , instantiation
 infile = form.getvalue('in')
-#infile ='deftask2'
+#infile ='deftask1'
 outfile = infile + '.html'
 print """
 <html>
@@ -48,6 +48,8 @@ print """
    <p> Run Log </p>
    <iframe name="Iframe1" frameborder="0" scrolling="no" width=70% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=rr_out_show.txt&out=rr_out_show.html"> </iframe> 
    <br>
+      <h3> Scheduling Parameters: </h3>
+   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/wtHtml.py?in=rr_wt&out=rr_wt.html"> </iframe>
    </body>
 </html>
 """
@@ -56,6 +58,8 @@ out = "Content-type:text/html\r\n\r\n"
 out += "RunTime\tName\tArrival\tBT\tStart\tUSE\tPRI\tEND\tSTATUS \n"
 err = "Content-type:text/html\r\n\r\n"
 err += "<br> <b> Error Log: </b> \n"
+param = "Content-type:text/html\r\n\r\n"
+param += "Name\tArrival\tBT\tStart\tEND\tFinish\tResponse Time\tWaiting Time\tTurn Around Time \n"
 #A task instance
 class TaskIns(object):
 
@@ -73,6 +77,9 @@ class TaskIns(object):
         self.finish = 0
         self.tq = tq  #time quantum
         self.remain_bt = 0
+        self.wt = 0
+        self.tat = 0
+        self.rt = 0
 	#Check Time Quantum
 	def tq_Check(self):
 	    if self.tq < self.usage:
@@ -82,32 +89,40 @@ class TaskIns(object):
 
     #Allow an instance to use the cpu (periodic)
     def use(self, usage):
-        global out, run_time, ready_list
+        global out, run_time, ready_list, param
         self.remain_bt = self.tq-self.usage
         self.run_time = run_time+clock_step-1
         self.usage += usage
         self.start = self.run_time
         self.finish = self.start + clock_step
-        if self.remain_bt <= 0:
+        self.wt = self.finish - self.at - self.bt
+        self.tat = self.finish - self.at        
+        self.rt = self.start - self.at
+        if self.remain_bt <= 1:
             self.status = "Finish"
             return True
         else:
-        	if self.tq <= self.usage:
+        	if self.remain_bt <= self.usage:
         		self.status = "requeue"
         	else:
         		self.status = " "
             
         out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status) + "\n"
-        if self.tq <= self.usage:
-        	self.status = "requeue"
-        	return True
-        self.wt(self.status)
-        if self.usage >= self.end - self.at:
-        		return True
-        		self.start=0
-        if self.usage <= self.tq:
-        	return False
-        	self.start=0
+        if self.status == "Finish" or self.status == "requeue" :
+            param += (self.name + "\t"+ str(self.at)+"\t"+  str(self.bt) +  "\t"+  str(self.finish) +  "\t"+  str(self.rt) + "\t"+  str(self.wt)+ "\t"+ str(self.tat)+"\t" +"\n")
+            return 1
+
+
+   
+    #Default representation
+    #def __repr__(self):
+    #    return str(self.name) + "#" + str(self.id) + " - at: " + str(self.at) + " priority: " + str(self.priority) + budget_text
+
+    #Get name as Name#id
+    def get_unique_name(self):
+        return str(self.name) + "#" + str(self.id)
+
+
         
     def wt(self, status):
             if self.status=="Finish":
@@ -151,7 +166,7 @@ def tasktype_cmp(self, other):
 if __name__ == '__main__':
     #Variables
     html_color = { 'T1':'red', 'T2':'blue', 'T3':'green', 'T4':'aqua', 'T5':'coral', 'T6':'red', 'T7':'blue', 'T8':'green', 'T9':'aqua', 'T10':'coral', 'Ideal':'grey', 'Finish':'black'}
-    taskfile = open('../pi/tasks.txt')
+    taskfile = open(infile)
     lines = taskfile.readlines()
     task_types = []
     tasks = []
@@ -277,6 +292,9 @@ if __name__ == '__main__':
     #Html output end
     html += "</body></html>"
     print err
+    wt_show = open('../pi/rr_wt', 'w')
+    wt_show.write(param)
+    wt_show.close()
     out_show = open('../pi/rr_out_show.txt', 'w')
     out_show.write(out)
     out_show.close()

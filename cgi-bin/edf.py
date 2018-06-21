@@ -17,7 +17,7 @@ import os
 print "Content-type:text/html\r\n\r\n"
 form = cgi.FieldStorage()  #trying cgi method , instantiation
 infile = form.getvalue('in')
-infile ='deftask1'
+#infile ='deftask1'
 #outfile = infile + '.html'
 print """
 <html>
@@ -103,8 +103,8 @@ class TaskIns(object):
             self.status = " "
         out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status) + "\n"
         if self.status == "Finish":
-        	param += (self.name + "\t"+ str(self.at)+"\t"+  str(self.bt) +  "\t"+  str(self.finish) +  "\t"+  str(self.rt) + "\t"+  str(self.wt)+ "\t"+ str(self.tat)+"\t" +"\n")
-        	return 1
+            param += (self.name + "\t"+ str(self.at)+"\t"+  str(self.bt) +  "\t"+  str(self.finish) +  "\t"+  str(self.rt) + "\t"+  str(self.wt)+ "\t"+ str(self.tat)+"\t" +"\n")
+            return 1
         
         
         if self.usage >= self.end - self.at:

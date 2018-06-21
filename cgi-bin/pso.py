@@ -1,78 +1,44 @@
 #!/usr/bin/python
-#Particle Swarm OPtimization scheduling implementation
-
-import string
+#--- IMPORT DEPENDENCIES -----------------------------------------------------i-
+from __future__ import division
 import random
-import fractions
+import math
+import cgi
+print ("Content-type:text/html\n")
+#--- COST FUNCTION ------------------------------------------------------------+
 
-
-def _lcm(a,b): return abs(a * b) / fractions.gcd(a,b) if a and b else 0
-
-def lcm(a):
-    return reduce(_lcm, a)
-
-# Import modules for CGI handling 
-import cgi, cgitb
-import os
-def func1(x):
+# function we are attempting to optimize (minimize)
+def func1(x,y):
+    total = 0
+    for i in range(len(x)):
+        total+=x[i]/y[i]
+    return total
+# function we are attempting to optimize (minimize)
+def func2(x,y):
     total=0
     for i in range(len(x)):
-        total+=x[i]**2
+        total=y[i]-x[i]
     return total
-print "Content-type:text/html\r\n\r\n"
-print """
-<html>
-   <head> </head>
-   <meta name="viewport" content="width=device-width, initial-scale=1">
-	<style>
-	table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    border: 1px solid #ddd;
-		}
 
-	th, td {
-    text-align: left;
-    /* padding: 8px; */
-		}
+#--- MAIN ---------------------------------------------------------------------+
 
-	tr:nth-child(even){background-color: #f2f2f2}
-	</style>
-   <title> Sucess </title>
-   <body>
-   <h2> The code Executed Successfully </h2>
-   <a href=/pso_html_show.html target=_new> HTML Gantt Chart </a>
-   <a href=/pso_out_show.txt target=_new> Text Log File </a>
-   <p> Gantt Chart </p>
-   <iframe name="Iframe2" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight+20 +'px';" src="/pso_html_show.html" > </iframe>
-   <p> Run Log </p>
-   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/pso_out_show.txt"> </iframe> 
-   
-   </body>
-</html>
-"""
-
-out = "Content-type:text/html\r\n\r\n"
-out += "RunTime\tName\tArrival\tBT\tStart\tUSE\tPRI\tEND\tSTATUS \n"
-
-#A task instance as swarm particle
 class Particle:
-    def __init__(self,x0):
-        self.position_i=x0          # particle position
+    def __init__(self,x0,y0):
+        self.position_i=[]          # particle position
         self.velocity_i=[]          # particle velocity
-        self.period = []
-        self.burst_time = []
+        self.deadline_i=[]          # task deadline
         self.pos_best_i=[]          # best position individual
         self.err_best_i=-1          # best error individual
         self.err_i=-1               # error individual
 
-        for i in range(0,num_dimensons):
+        for i in range(0,num_dimensions):
             self.velocity_i.append(random.uniform(-1,1))
+            self.position_i.append(x0[i])
+            self.deadline_i.append(y0[i])
 
     # evaluate current fitness
     def evaluate(self,costFunc):
-        self.err_i=costFunc(self.position_i)
+        self.err_i=costFunc(self.position_i, self.deadline_i)
 
         # check to see if the current position is an individual best
         if self.err_i < self.err_best_i or self.err_best_i==-1:
@@ -107,7 +73,7 @@ class Particle:
                 self.position_i[i]=bounds[i][0]
                 
 class PSO():
-    def __init__(self,costFunc,x0,bounds,num_particles,maxiter):
+    def __init__(self,costFunc,x0,y0,bounds,num_particles,maxiter):
         global num_dimensions
 
         num_dimensions=len(x0)
@@ -117,7 +83,7 @@ class PSO():
         # establish the swarm
         swarm=[]
         for i in range(0,num_particles):
-            swarm.append(Particle(x0))
+            swarm.append(Particle(x0,y0))
 
         # begin optimization loop
         i=0
@@ -143,133 +109,13 @@ class PSO():
         print pos_best_g
         print err_best_g
 
-if __name__ == '__main__':
-    html_color = { 'T1':'red', 'T2':'blue', 'T3':'green', 'T4':'aqua', 'T5':'coral', 'T6':'red', 'T7':'blue', 'T8':'green', 'T9':'aqua', 'T10':'coral', 'Ideal':'grey', 'Finish':'black'}
-    taskfile = open('../pi/tasks.txt')
-    lines = taskfile.readlines()
-    task_types = []
-    tasks = []
-    hyperperiod = []
-    done_list = []
-    num_dimensons = 90
-    #Allocate task types
-    for line in lines[3:]:
-        line = line.split('\t')
-        for i in range (0,4):
-            line[i] = int(line[i])
-        if len(line) == 5:
-            name = line[4]
-        elif len(line) == 4:
-            name = 'Task'
-        else:
-            raise Exception('Invalid tasks.txt file structure')
-        if int(line[0])>=0:
-            task_types.append(Particle(x0=line[0], burst_time=line[1], period=line[2]))
-            #task_types.append(Particle(arrival_time=line[0], burst_time=line[1], period=line[2], deadline=line[3], name=name))
-    #Calculate hyperperiod
-    for task_type in task_types:
-        hyperperiod.append(task_type.period)
-    hyperperiod = lcm(hyperperiod)
-    #Create task instances 
-    for i in xrange(0, hyperperiod):
-        for task_type in task_types:
-            if  (i - task_type.arrival_time) % task_type.period == 0 and i >= task_type.arrival_time:
-                start = i
-                end = start + task_type.burst_time
-                priority = start
-                Particle(x0=task_type.arrival_time)
+if __name__ == "__PSO__":
+    main()
 
-    #Html output at
-    html = "Content-type:text/html\r\n\r\n"
-    html = """num_dimensions
-    <!DOCTYPE html><html><head><title>LLF Scheduling</title></head><body>
-           <meta name="viewport" content="width=device-width, initial-scale=1">
-	<style>
-	table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    border: 1px solid #ddd;
-		}
+#--- RUN ----------------------------------------------------------------------+
 
-	th, td {
-    text-align: left;
-    padding: 9px;
-		}
+#initial=[5,5]               # initial starting location [x1,x2...]
+#bounds=[(-10,10),(-10,10)]  # input bounds [(x1_min,x1_max),(x2_min,x2_max)...]
+#PSO(func1,initial,bounds,num_particles=15,maxiter=30)
 
-	tr:nth-child(even){background-color: #f2f2f2}
-	</style>
-   <title> Sucess </title>
-   		<div style="overflow-x:auto">
-		<table> <tr>
-
-		"""
-    #Check utilization
-    utilization = 0
-    for task_type in task_types:
-        utilization += float(task_type.burst_time) / float(task_type.period)
-    if utilization > 1:
-        out += 'Utilization error!'
-        html += '<br /><br />Utilization error!<br /><br />'
-
-    #Simulate clock
-    clock_step = 1
-    run_time = 0
-    for i in xrange(0, hyperperiod, clock_step):
-        #Fetch ready_list tasks that can use cpu and sort by priority
-        ready_list = []
-        for t in tasks:
-            if t.at <= i:
-                ready_list.append(t)
-
-        #Select task with highest priority
-        # Print Tasks
-        PSO(func1,initial,bounds,num_particles=15,maxiter=30)
-        if len(ready_list) > 0:
-            on_cpu = ready_list[0]
-            done_list.append(on_cpu)
-            html += '<td style="background-color:' + html_color[on_cpu.name] + ';">' + on_cpu.name + '</td>' + '\n'
-            #on_cpu.priority += clock_step
-            if on_cpu.use(clock_step):
-                tasks.remove(on_cpu)
-                run_time += clock_step
-                #out += "\n"
-                # Not Print Finish as it is showing on Gantt chart
-                #html += '<td style="text-align: center; width: 10px; height: 50px; background-color:' + html_color['Finish'] + ';"></td>'  + '\n'
-               # out += "Finish!" ,
-            else:
-            	# Processor is not used but runtime is going
-            	run_time += clock_step
-            	
-        else:
-            out += runtime, '\n No task uses the processor. '
-            # Processor is not used but runtime is going
-            run_time += clock_step
-            html += '<td style="background-color:' + html_color['Ideal'] + ';">I</td>'  + '\n'
-        out += "\n"
-            
-
-    #out += remaining periodic tasks
-    html += "<br /><br />"
-    for p in tasks:
-        out += p.get_unique_name() + " is dropped due to overload!"
-        html += "<p>" + p.get_unique_name() + " is dropped due to overload!</p>"
-    
-    #Table done, print period below table
-    html += "</tr>"
-    # at New row to print runtime
-    html += "<tr>"
-    for run_time in range(0, hyperperiod+1) :
-    	html +='<td style="padding: 8px 8px 8px 0px;">' + str(run_time) + '</td>'
-       
-    #Html output end
-    html += "</body></html>"
-    html_show = open('../pi/pso_html_show.html', 'w')
-    html_show.write(html)
-    html_show.close()
-    out_show = open('../pi/pso_out_show.txt', 'w')
-    out_show.write(out)
-    out_show.close()
-    print html
-    print out
-
+#--- END ----------------------------------------------------------------------+

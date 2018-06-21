@@ -17,7 +17,7 @@ import os
 print "Content-type:text/html\r\n\r\n"
 form = cgi.FieldStorage()  #trying cgi method , instantiation
 infile = form.getvalue('in')
-infile ='deftask2'
+#infile ='deftask2'
 outfile = infile + '.html'
 print """
 <html>
@@ -41,13 +41,15 @@ print """
    <title> Sucess </title>
    <body>
    <h2> The code Executed Successfully </h2>
-   <a href=/rr_html_show.html target=_new> HTML Gantt Chart </a>
-   <a href=/rr_out_show.txt target=_new> Text Log File </a>
+   <a href=/prr_html_show.html target=_new> HTML Gantt Chart </a>
+   <a href=/prr_out_show.txt target=_new> Text Log File </a>
    <p> Gantt Chart </p>
-   <iframe name="Iframe2" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight+20 +'px';" src="/rr_html_show.html" > </iframe>
+   <iframe name="Iframe2" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight+20 +'px';" src="/prr_html_show.html" > </iframe>
    <p> Run Log </p>
-   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=rr_out_show.txt&out=rr_out_show.html"> </iframe> 
-   
+   <iframe name="Iframe1" frameborder="0" scrolling="no" width=70% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=prr_out_show.txt&out=prr_out_show.html"> </iframe> 
+   <br>
+      <h3> Scheduling Parameters: </h3>
+   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/wtHtml.py?in=prr_wt&out=prr_wt.html"> </iframe>
    </body>
 </html>
 """
@@ -56,6 +58,8 @@ out = "Content-type:text/html\r\n\r\n"
 out += "RunTime\tName\tArrival\tBT\tStart\tUSE\tPRI\tEND\tSTATUS \n"
 err = "Content-type:text/html\r\n\r\n"
 err += "<br> <b> Error Log: </b> \n"
+param = "Content-type:text/html\r\n\r\n"
+param += "Name\tArrival\tBT\tStart\tEND\tFinish\tResponse Time\tWaiting Time\tTurn Around Time \n"
 #A task instance
 class TaskIns(object):
 
@@ -72,14 +76,10 @@ class TaskIns(object):
         self.start = start
         self.finish = 0
         self.tq = tq  #time quantum
-    def name_cmp(self, other):
-    	if self.name == other.name:
-       	 return 1
-       	else:
-       		return -1
-    	return 0
-    	
-   
+        self.remain_bt = 0
+        self.wt = 0
+        self.tat = 0
+        self.rt = 0
 	#Check Time Quantum
 	def tq_Check(self):
 	    if self.tq < self.usage:
@@ -89,13 +89,18 @@ class TaskIns(object):
 
     #Allow an instance to use the cpu (periodic)
     def use(self, usage):
-        global out, run_time, ready_list
+        global out, run_time, ready_list, param
+        self.remain_bt = self.tq-self.usage
         self.run_time = run_time+clock_step-1
         self.usage += usage
         self.start = self.run_time
         self.finish = self.start + clock_step
-        if self.usage >= self.bt:
+        self.wt = self.finish - self.at - self.bt
+        self.tat = self.finish - self.at        
+        self.rt = self.start - self.at
+        if self.remain_bt <= 0:
             self.status = "Finish"
+            return True
         else:
         	if self.tq <= self.usage:
         		self.status = "requeue"
@@ -103,20 +108,25 @@ class TaskIns(object):
         		self.status = " "
             
         out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status) + "\n"
-        if self.tq <= self.usage:
-        	self.status = "requeue"
-        	return True
-        self.wt(self.status)
-        if self.usage >= self.end - self.at:
-        		return True
-        		self.start=0
-        if self.usage <= self.tq:
-        	return False
-        	self.start=0
+        if self.status == "Finish" or self.status == "requeue" :
+            param += (self.name + "\t"+ str(self.at)+"\t"+  str(self.bt) +  "\t"+  str(self.finish) +  "\t"+  str(self.rt) + "\t"+  str(self.wt)+ "\t"+ str(self.tat)+"\t" +"\n")
+            return 1
+
+
+   
+    #Default representation
+    #def __repr__(self):
+    #    return str(self.name) + "#" + str(self.id) + " - at: " + str(self.at) + " priority: " + str(self.priority) + budget_text
+
+    #Get name as Name#id
+    def get_unique_name(self):
+        return str(self.name) + "#" + str(self.id)
+
+
         
     def wt(self, status):
             if self.status=="Finish":
-        	print "%s arrived at %s started at %s last started at  %s and finished at %s <br>" %(self.name, self.at, self.start, self.start, self.finish) 
+        	print (" <p>" + self.name + "\t"+ str(self.at) + "\t"+  str(self.start) +  "\t"+  str(self.start) + "\t"+  str(self.finish) + "</p> \n ") 
     
     #Default representation
     #def __repr__(self):
@@ -147,9 +157,9 @@ def priority_cmp(one, other):
 
 #Deadline monotonic comparison
 def tasktype_cmp(self, other):
-    if self.arrival_time < other.arrival_time:
+    if self.deadline < other.deadline:
         return -1
-    if self.arrival_time > other.arrival_time:
+    if self.deadline > other.deadline:
         return 1
     return 0
 
@@ -282,10 +292,13 @@ if __name__ == '__main__':
     #Html output end
     html += "</body></html>"
     print err
-    out_show = open('../pi/rr_out_show.txt', 'w')
+    wt_show = open('../pi/prr_wt', 'w')
+    wt_show.write(param)
+    wt_show.close()
+    out_show = open('../pi/prr_out_show.txt', 'w')
     out_show.write(out)
     out_show.close()
-    html_show = open('../pi/rr_html_show.html', 'w')
+    html_show = open('../pi/prr_html_show.html', 'w')
     html_show.write(html)
     html_show.close()
 

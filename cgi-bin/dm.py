@@ -18,7 +18,7 @@ print "Content-type:text/html\r\n\r\n"
 form = cgi.FieldStorage()  #trying cgi method , instantiation
 infile = form.getvalue('in')
 #infile ='deftask1'
-outfile = infile + '.html'
+#outfile = infile + '.html'
 print """
 <html>
    <head> </head>
@@ -47,6 +47,8 @@ print """
    <iframe name="Iframe2" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight+20 +'px';" src="/dm_html_show.html" > </iframe>
    <p> Run Log </p>
    <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/outHtml.py?in=dm_out_show.txt&out=dm_out_show.html"> </iframe> 
+   <h3> Scheduling Parameters: </h3>
+   <iframe name="Iframe1" frameborder="0" scrolling="no" width=100% onload="this.style.height=this.contentDocument.body.scrollHeight +'px';" src="/cgi-bin/wtHtml.py?in=dm_wt&out=dm_wt.html"> </iframe>
    
    </body>
 </html>
@@ -56,6 +58,10 @@ out = "Content-type:text/html\r\n\r\n"
 out += "RunTime\tName\tArrival\tBT\tStart\tUSE\tPRI\tEND\tSTATUS \n"
 err = "Content-type:text/html\r\n\r\n"
 err += "<br> <b> Error Log: </b> \n"
+param = "Content-type:text/html\r\n\r\n"
+param += "Name\tArrival\tBT\tStart\tEND\tFinish\tResponse Time\tWaiting Time\tTurn Around Time \n"
+
+#A task instance
 #A task instance
 class TaskIns(object):
 
@@ -71,6 +77,9 @@ class TaskIns(object):
         self.run_time = 0
         self.start = start
         self.finish = 0
+        self.wt = 0
+        self.tat = 0
+        self.rt = 0
     def name_cmp(self, other):
     	if self.name == other.name:
        	 return 1
@@ -80,19 +89,23 @@ class TaskIns(object):
 
     #Allow an instance to use the cpu (periodic)
     def use(self, usage):
-        global out, run_time
+        global out, run_time, param
         self.run_time = run_time+clock_step-1
         self.usage += usage
         self.start = self.run_time
         self.finish = self.start + clock_step
+        self.wt = self.finish - self.at - self.bt
+        self.tat = self.finish - self.at        
+        self.rt = self.start - self.at
+
         if self.usage >= self.bt:
             self.status = "Finish"
         else:
             self.status = " "
-        out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status)  + "\n"
+        out += str(self.run_time) + "\t" + str(on_cpu.name) +"\t"+ str(self.at)+"\t" + str(self.bt)+"\t"  + str(self.start) +"\t"+ str(clock_step) +"\t"+ str(self.priority) +"\t"+ str(self.finish)+"\t"+  str(self.status) + "\n"
         if self.status == "Finish":
-        	self.wt(self.status)
-        	return 1
+            param += (self.name + "\t"+ str(self.at)+"\t"+  str(self.bt) +  "\t"+  str(self.finish) +  "\t"+  str(self.rt) + "\t"+  str(self.wt)+ "\t"+ str(self.tat)+"\t" +"\n")
+            return 1
         
         
         if self.usage >= self.end - self.at:
@@ -102,8 +115,10 @@ class TaskIns(object):
         self.start=0
         
     def wt(self, status):
+            global param
             if self.status=="Finish":
-                 print (" <p>" + self.name + "\t"+ str(self.at) + "\t"+  str(self.start) +  "\t"+  str(self.start) + "\t"+  str(self.finish) + "</p> \n ")
+                return True
+   
     #Default representation
     #def __repr__(self):
     #    return str(self.name) + "#" + str(self.id) + " - at: " + str(self.at) + " priority: " + str(self.priority) + budget_text
@@ -133,15 +148,15 @@ def priority_cmp(one, other):
 
 #Deadline monotonic comparison
 def tasktype_cmp(self, other):
-    if self.deadline < other.deadline:
+    if self.deadline < other.deadline :
         return -1
-    if self.deadline > other.deadline:
+    if self.deadline  > other.deadline :
         return 1
     return 0
 
 if __name__ == '__main__':
     #Variables
-    html_color = { 'T1':'red', 'T2':'blue', 'T3':'green', 'T4':'aqua', 'T5':'coral', 'T6':'red', 'T7':'blue', 'T8':'green', 'T9':'aqua', 'T10':'coral', 'Ideal':'grey', 'Finish':'black'}
+    html_color = { 'T1':'red', 'T2':'blue', 'T3':'green', 'T4':'aqua', 'T5':'coral', 'Ideal':'grey', 'Finish':'black'}
     taskfile = open(infile)
     lines = taskfile.readlines()
     task_types = []
@@ -177,13 +192,13 @@ if __name__ == '__main__':
             if  (i - task_type.arrival_time) % task_type.period == 0 and i >= task_type.arrival_time:
                 start = i
                 end = start + task_type.burst_time
-                priority = start + task_type.deadline
+                priority = start + task_type.period
                 tasks.append(TaskIns(at=task_type.arrival_time, start=start, end=end, priority=priority, name=task_type.name, bt=task_type.burst_time))
 
     #Html output at
     html = "Content-type:text/html\r\n\r\n"
     html = """
-    <!DOCTYPE html><html><head><title>DM Scheduling</title></head><body>
+    <!DOCTYPE html><html><head><title>LLF Scheduling</title></head><body>
            <meta name="viewport" content="width=device-width, initial-scale=1">
 	<style>
 	table {
@@ -195,7 +210,7 @@ if __name__ == '__main__':
 
 	th, td {
     text-align: left;
-    padding: 9px;
+    padding: 8px;
 		}
 
 	tr:nth-child(even){background-color: #f2f2f2}
@@ -211,7 +226,8 @@ if __name__ == '__main__':
         utilization += float(task_type.burst_time) / float(task_type.period)
     html += "<b> Utilization: " + str(utilization) + "</b>"
     if utilization > 1:
-        err += '<br> Utilization error! <br>'
+        err += '<b> Utilization error! </b> \n'
+        html += '<br /><br />Utilization error!<br /><br />'
 
     #Simulate clock
     clock_step = 1
@@ -230,7 +246,7 @@ if __name__ == '__main__':
             on_cpu = ready_list[0]
             done_list.append(on_cpu)
             html += '<td style="background-color:' + html_color[on_cpu.name] + ';">' + on_cpu.name + '</td>' + '\n'
-            #on_cpu.priority += clock_step
+           # on_cpu.priority += clock_step
             if on_cpu.use(clock_step):
                 tasks.remove(on_cpu)
                 run_time += clock_step
@@ -253,7 +269,7 @@ if __name__ == '__main__':
     #out += remaining periodic tasks
     html += "<br /><br />"
     for p in tasks:
-         err += "<p> " + p.get_unique_name() + " is dropped due to overload! </p>"
+        err += "<p> " + p.get_unique_name() + " is dropped due to overload! </p>\n"
     
     #Table done, print period below table
     html += "</tr>"
@@ -265,11 +281,13 @@ if __name__ == '__main__':
     #Html output end
     html += "</body></html>"
     print err
+    wt_show = open('../pi/dm_wt', 'w')
+    wt_show.write(param)
+    wt_show.close()
     out_show = open('../pi/dm_out_show.txt', 'w')
     out_show.write(out)
-    out_show.close()
     html_show = open('../pi/dm_html_show.html', 'w')
     html_show.write(html)
     html_show.close()
-
+    out_show.close()
 
